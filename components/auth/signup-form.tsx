@@ -10,32 +10,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { signUpSchema } from "@/schemas/authSchemas";
 
-// Validation schema using Zod
-const signUpSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters long")
-    .max(20, "Password must not exceed 20 characters"),
-  confirmPassword: z
-    .string()
-    .min(6, "Password must be at least 6 characters long")
-    .max(20, "Password must not exceed 20 characters")
-    .refine((val, ctx) => val === ctx.parent.password, {
-      message: "Passwords don't match",
-    }),
-});
-
+// Define the type from the Zod schema
 type SignUpFormData = z.infer<typeof signUpSchema>;
+
+interface SignUpFormProps extends React.ComponentProps<"div"> {}
 
 export function SignUpForm({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: SignUpFormProps) {
   const {
     register,
     handleSubmit,
@@ -44,9 +32,9 @@ export function SignUpForm({
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit = (data: SignUpFormData) => {
+  const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
     console.log(data);
-    // You can handle the sign-up logic here, such as calling an API
+    // Handle sign-up logic here (e.g., call API)
   };
 
   return (
@@ -66,7 +54,7 @@ export function SignUpForm({
                     id="email"
                     type="email"
                     placeholder="m@example.com"
-                    {...register("email")}
+                    {...register("email")} // Register the email input field
                   />
                   {errors.email && (
                     <span className="text-red-500 text-sm">
@@ -74,6 +62,7 @@ export function SignUpForm({
                     </span>
                   )}
                 </div>
+
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
@@ -82,7 +71,7 @@ export function SignUpForm({
                     id="password"
                     type="password"
                     placeholder="********"
-                    {...register("password")}
+                    {...register("password")} // Register the password input field
                   />
                   {errors.password && (
                     <span className="text-red-500 text-sm">
@@ -90,6 +79,7 @@ export function SignUpForm({
                     </span>
                   )}
                 </div>
+
                 <div className="grid gap-3">
                   <div className="flex items-center">
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
@@ -98,7 +88,7 @@ export function SignUpForm({
                     id="confirmPassword"
                     type="password"
                     placeholder="********"
-                    {...register("confirmPassword")}
+                    {...register("confirmPassword")} // Register the confirmPassword input field
                   />
                   {errors.confirmPassword && (
                     <span className="text-red-500 text-sm">
@@ -115,12 +105,14 @@ export function SignUpForm({
           </form>
         </CardContent>
       </Card>
+
       <div className="text-center text-sm">
         Already have an account?{" "}
         <Link href="/" className="underline underline-offset-4">
           Login
-        </a>
+        </Link>
       </div>
+
       <div className="text-muted-foreground text-center text-xs text-balance">
         By signing up, you agree to our <a href="#">Terms of Service</a> and{" "}
         <a href="#">Privacy Policy</a>.
