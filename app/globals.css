@@ -10,75 +10,108 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.13 0.028 261.692);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.13 0.028 261.692);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.028 261.692);
-  --primary: oklch(0.21 0.034 264.665);
-  --primary-foreground: oklch(0.985 0.002 247.839);
-  --secondary: oklch(0.967 0.003 264.542);
-  --secondary-foreground: oklch(0.21 0.034 264.665);
-  --muted: oklch(0.967 0.003 264.542);
-  --muted-foreground: oklch(0.551 0.027 264.364);
-  --accent: oklch(0.967 0.003 264.542);
-  --accent-foreground: oklch(0.21 0.034 264.665);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.928 0.006 264.531);
-  --input: oklch(0.928 0.006 264.531);
-  --ring: oklch(0.872 0.01 258.338);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;;
-  --sidebar: oklch(0.985 0.002 247.839);
-  --sidebar-foreground: oklch(0.13 0.028 261.692);
-  --sidebar-primary: oklch(0.21 0.034 264.665);
-  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-accent: oklch(0.967 0.003 264.542);
-  --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
-  --sidebar-border: oklch(0.928 0.006 264.531);
-  --sidebar-ring: oklch(0.872 0.01 258.338);
-
+  /* Background and Foreground */
+  --background: #f4f4f9; /* Soft off-white background for a clean look */
+  --foreground: #333333; /* Dark gray text for good contrast */
+  
+  /* Card & Popover */
+  --card: #ffffff; /* White card for clean, crisp look */
+  --card-foreground: #333333; /* Dark text for contrast in cards */
+  --popover: #ffffff; /* Light background for popovers */
+  --popover-foreground: #333333; /* Dark text for popovers */
+  
+  /* Primary Color */
+  --primary: #f44336; /* Vibrant red (often associated with restaurants, and urgency) */
+  --primary-foreground: #ffffff; /* White text on primary color for clarity */
+  
+  /* Secondary Color */
+  --secondary: #ff9800; /* Warm orange to complement the red primary */
+  --secondary-foreground: #ffffff; /* White text for secondary actions */
+  
+  /* Muted and Disabled States */
+  --muted: #e0e0e0; /* Soft gray for inactive elements */
+  --muted-foreground: #757575; /* Darker gray for muted text */
+  
+  /* Accent Color */
+  --accent: #ffeb3b; /* Golden yellow for highlights, like stars or special items */
+  --accent-foreground: #333333; /* Dark text for contrast with accent color */
+  
+  /* Destructive Color */
+  --destructive: #e53935; /* Red for destructive actions */
+  --destructive-foreground: #ffffff; /* White foreground text */
+  
+  /* Border and Ring */
+  --border: #ddd; /* Light gray border */
+  --input: #ffffff; /* White input fields */
+  --ring: #ff5722; /* Warm orange ring color for focused elements */
+  
+  /* Chart Colors (can be used for visualizations like sales or analytics) */
+  --chart-1: #4caf50; /* Green for positive data */
+  --chart-2: #2196f3; /* Blue for neutral or informational data */
+  --chart-3: #ffeb3b; /* Yellow for warnings or attention-grabbing */
+  --chart-4: #9c27b0; /* Purple for special data categories */
+  --chart-5: #ff9800; /* Orange for intermediate data */
+  
+  /* Sidebar */
+  --sidebar: #ffffff; /* Light sidebar for a clean and modern look */
+  --sidebar-foreground: #333333; /* Dark text in the sidebar */
+  --sidebar-primary: #f44336; /* Red sidebar primary color */
+  --sidebar-primary-foreground: #ffffff; /* White text on sidebar primary */
+  --sidebar-accent: #ff9800; /* Orange sidebar accents */
+  --sidebar-accent-foreground: #333333; /* Dark text for sidebar accents */
+  
+  /* Border and Ring */
+  --sidebar-border: #ddd; /* Light gray border in sidebar */
+  --sidebar-ring: #ff5722; /* Warm orange for sidebar focus */
+  
+  --radius: 0.625rem; /* Rounded corners for softer design */
 }
 
 .dark {
-  --background: oklch(0.13 0.028 261.692);
-  --foreground: oklch(0.985 0.002 247.839);
-  --card: oklch(0.13 0.028 261.692);
-  --card-foreground: oklch(0.985 0.002 247.839);
-  --popover: oklch(0.13 0.028 261.692);
-  --popover-foreground: oklch(0.985 0.002 247.839);
-  --primary: oklch(0.985 0.002 247.839);
-  --primary-foreground: oklch(0.21 0.034 264.665);
-  --secondary: oklch(0.278 0.033 256.848);
-  --secondary-foreground: oklch(0.985 0.002 247.839);
-  --muted: oklch(0.278 0.033 256.848);
-  --muted-foreground: oklch(0.707 0.022 261.325);
-  --accent: oklch(0.278 0.033 256.848);
-  --accent-foreground: oklch(0.985 0.002 247.839);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.278 0.033 256.848);
-  --input: oklch(0.278 0.033 256.848);
-  --ring: oklch(0.446 0.03 256.802);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.034 264.665);
-  --sidebar-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-accent: oklch(0.278 0.033 256.848);
-  --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-border: oklch(0.278 0.033 256.848);
-  --sidebar-ring: oklch(0.446 0.03 256.802);
+  /* Dark mode colors */
+  --background: #121212; /* Dark gray background for dark mode */
+  --foreground: #e0e0e0; /* Light text in dark mode */
+  
+  --card: #1e1e1e; /* Dark card background */
+  --card-foreground: #e0e0e0; /* Light text in dark mode cards */
+  
+  --popover: #1e1e1e; /* Dark background for popovers */
+  --popover-foreground: #e0e0e0; /* Light text for popovers */
+  
+  --primary: #ff5722; /* Warm orange-red for primary in dark mode */
+  --primary-foreground: #ffffff; /* White text for primary */
+  
+  --secondary: #ff9800; /* Warm orange remains for secondary */
+  --secondary-foreground: #ffffff; /* White text */
+  
+  --muted: #333333; /* Dark muted background for dark mode */
+  --muted-foreground: #757575; /* Dark gray text for muted */
+  
+  --accent: #ffeb3b; /* Bright yellow for accents */
+  --accent-foreground: #333333; /* Dark text on accent */
+  
+  --destructive: #e53935; /* Red for destructive actions in dark mode */
+  --destructive-foreground: #ffffff; /* White text for destructive actions */
+  
+  --border: #444; /* Darker border for dark mode */
+  --input: #333333; /* Dark input fields */
+  --ring: #ff5722; /* Warm orange for focus ring */
+  
+  --chart-1: #4caf50; /* Green for positive data */
+  --chart-2: #2196f3; /* Blue for neutral data */
+  --chart-3: #ffeb3b; /* Yellow for attention-grabbing data */
+  --chart-4: #9c27b0; /* Purple for special data */
+  --chart-5: #ff9800; /* Orange for intermediate data */
+  
+  --sidebar: #1e1e1e; /* Dark sidebar */
+  --sidebar-foreground: #e0e0e0; /* Light text in sidebar */
+  --sidebar-primary: #ff5722; /* Warm orange-red for sidebar */
+  --sidebar-primary-foreground: #ffffff; /* White text */
+  --sidebar-accent: #ff9800; /* Orange sidebar accent */
+  --sidebar-accent-foreground: #333333; /* Dark text on accent */
+  
+  --sidebar-border: #444; /* Dark border for sidebar */
+  --sidebar-ring: #ff5722; /* Orange focus ring in sidebar */
 }
 
 @theme inline {
@@ -106,10 +139,6 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
