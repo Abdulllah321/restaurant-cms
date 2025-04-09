@@ -2,8 +2,10 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { setCookie } from "nookies"; // For setting cookies
-import bcrypt from "bcryptjs"; // Assuming password encryption, adapt based on your DB
-import { PrismaClient } from "@prisma/client"; // Assuming Prisma as your ORM
+import bcrypt from "bcryptjs"; // Password encryption
+import { PrismaClient } from "@prisma/client"; // ORM
+import jwt from "jsonwebtoken"; // JWT token library
+import { validateEmail, validatePassword } from "@/utils/validation"; // Custom validation functions
 
 const prisma = new PrismaClient();
 
@@ -16,6 +18,14 @@ const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({ message: "Email and password are required" });
         }
 
+        if (!validateEmail(email)) {
+            return res.status(400).json({ message: "Invalid email format" });
+        }
+
+        if (!validatePassword(password)) {
+            return res.status(400).json({ message: "Password is too weak" });
+        }
+
         try {
             // Check user credentials in the database
             const user = await prisma.user.findUnique({
@@ -23,20 +33,34 @@ const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
             });
 
             if (!user) {
-                return res.status(401).json({ message: "Invalid email or password" });
+                return res.status(401).json({ message: "Invalid credentials" });
             }
 
             // Compare the provided password with the hashed password in DB
-            const isPasswordValid = await bcrypt.compare(password, user.password);
-            if (!isPasswordValid) {
-                return res.status(401).json({ message: "Invalid email or password" });
+            if (!user.password) {
+                return res.status(401).json({ message: "Invalid credentials" });
             }
 
-            // Set up session cookie (for example, a JWT token)
-            const token = "generated-jwt-token"; // Generate JWT or use session token
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: "Invalid credentials" });
+            }
+
+
+            // Generate JWT token with expiration and user info (use your JWT secret from env variable)
+            const token = jwt.sign(
+                { userId: user.id, email: user.email },
+                process.env.JWT_SECRET!, // Use an environment variable for the JWT secret
+                { expiresIn: '1d' } // Token expires in 1 day
+            );
+
+            // Set up session cookie (with httpOnly flag for security)
             setCookie({ res }, "auth-token", token, {
                 maxAge: 60 * 60 * 24, // 1 day
                 path: "/",
+                httpOnly: true, // Prevents access to the cookie from JavaScript (helps mitigate XSS)
+                secure: process.env.NODE_ENV === "production", // Only send cookie over HTTPS in production
+                sameSite: "Strict", // Restrict sending cookies cross-site
             });
 
             return res.status(200).json({ message: "Login successful" });

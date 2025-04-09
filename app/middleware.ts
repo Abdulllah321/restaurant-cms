@@ -1,4 +1,4 @@
-// /middleware.ts
+// app/middleware.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { parseCookies } from "nookies";
@@ -8,8 +8,8 @@ export function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
     const cookies = parseCookies({ req });
 
-    // Skip middleware for non-protected routes (e.g., public pages, login)
-    if (pathname.startsWith("/api/login") || pathname.startsWith("/login")) {
+    // Skip middleware for the /login route
+    if (pathname.startsWith("/login")) {
         return NextResponse.next();
     }
 
@@ -24,7 +24,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
 }
 
-// Apply middleware globally or for specific paths
+// Apply middleware globally except for /login route
 export const config = {
-    matcher: ['/dashboard', '/profile', '/orders'], // Add your protected route paths here
+    matcher: "/(.*)",  // Apply globally to all routes
 };

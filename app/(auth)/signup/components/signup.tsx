@@ -14,13 +14,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { loginSchema } from "@/schemas/authSchemas";
+import { signupSchema } from "@/schemas/authSchemas"; // Make sure to create a signup schema
 
 
 // Type of form data based on schema
-type LoginFormData = z.infer<typeof loginSchema>;
+type SignupFormData = z.infer<typeof signupSchema>;
 
-export function LoginForm({
+export function SignupForm({
     className,
     ...props
 }: React.ComponentPropsWithoutRef<"div">) {
@@ -32,18 +32,18 @@ export function LoginForm({
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<LoginFormData>({
-        resolver: zodResolver(loginSchema),
+    } = useForm<SignupFormData>({
+        resolver: zodResolver(signupSchema),
     });
 
     // Form submission handler
-    const onSubmit = async (data: LoginFormData) => {
+    const onSubmit = async (data: SignupFormData) => {
         setIsLoading(true);
         setErrorMessage(null);
 
         try {
-            // Call API for login (replace with your actual API call)
-            const response = await fetch('/api/login', {
+            // Call API for signup
+            const response = await fetch('/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,8 +54,8 @@ export function LoginForm({
             const result = await response.json();
 
             if (response.ok) {
-                // Handle success (e.g., redirect to dashboard or home page)
-                console.log("Login successful", result);
+                // Handle success (e.g., redirect to login or dashboard page)
+                console.log("Signup successful", result);
             } else {
                 // Handle errors (e.g., show error message)
                 setErrorMessage(result.message || "Something went wrong!");
@@ -71,9 +71,9 @@ export function LoginForm({
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Welcome back</CardTitle>
+                    <CardTitle className="text-xl">Create an Account</CardTitle>
                     <CardDescription>
-                        Login with your Apple or Google account
+                        Sign up to get started with our service
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -94,19 +94,13 @@ export function LoginForm({
                                     </p>
                                 )}
                             </div>
+
                             <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
-                                    <a
-                                        href="#"
-                                        className="ml-auto text-sm underline-offset-4 hover:underline"
-                                    >
-                                        Forgot your password?
-                                    </a>
-                                </div>
+                                <Label htmlFor="password">Password</Label>
                                 <Input
                                     id="password"
                                     type="password"
+                                    placeholder="Password"
                                     {...register("password")}
                                     required
                                 />
@@ -116,8 +110,25 @@ export function LoginForm({
                                     </p>
                                 )}
                             </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                                <Input
+                                    id="confirmPassword"
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    {...register("confirmPassword")}
+                                    required
+                                />
+                                {errors.confirmPassword && (
+                                    <p className="text-red-500 text-sm">
+                                        {errors.confirmPassword.message}
+                                    </p>
+                                )}
+                            </div>
+
                             <Button type="submit" className="w-full" disabled={isLoading}>
-                                {isLoading ? "Logging in..." : "Login"}
+                                {isLoading ? "Signing up..." : "Sign Up"}
                             </Button>
                         </div>
                     </form>
