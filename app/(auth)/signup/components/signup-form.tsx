@@ -20,7 +20,7 @@ import { signupSchema } from "@/schemas/authSchemas"; // Make sure to create a s
 // Type of form data based on schema
 type SignupFormData = z.infer<typeof signupSchema>;
 
-export function SignupForm({
+function SignupForm({
     className,
     ...props
 }: React.ComponentPropsWithoutRef<"div">) {
@@ -79,6 +79,21 @@ export function SignupForm({
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2">
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="firstName">First Name</Label>
+                                    <Input id="firstName" placeholder="First Name" {...register("firstName")} required />
+                                    {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName.message}</p>}
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="lastName">Last Name</Label>
+                                    <Input id="lastName" placeholder="Last Name" {...register("lastName")} required />
+                                    {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
+                                </div>
+                            </div>
+
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email</Label>
                                 <Input
@@ -144,3 +159,5 @@ export function SignupForm({
         </div>
     );
 }
+
+export default SignupForm

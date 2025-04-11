@@ -3,28 +3,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseCookies } from "nookies";
 
-// Middleware for protected routes
 export function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
     const cookies = parseCookies({ req });
-
-    // Skip middleware for the /login route
-    if (pathname.startsWith("/login")) {
-        return NextResponse.next();
+    const token = cookies["auth-token"];
+    console.log("middleware !!")
+    // If token exists and user is trying to access login or signup, redirect to dashboard
+    if (token && (pathname.startsWith("/login") || pathname.startsWith("/signup"))) {
+        return NextResponse.redirect(new URL("/", req.url)); // or your desired protected route
     }
 
-    // Check if the token exists in the cookies
-    const token = cookies["auth-token"];
-    if (!token) {
-        // Redirect to login page if no token is found
+    // If no token and accessing protected routes (anything other than login/signup), redirect to login
+    if (!token && !pathname.startsWith("/login") && !pathname.startsWith("/signup")) {
         return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    // If token exists, proceed to the requested route
     return NextResponse.next();
 }
 
-// Apply middleware globally except for /login route
 export const config = {
-    matcher: "/(.*)",  // Apply globally to all routes
+    matcher: "/(.*)",  // Applies middleware to all routes
 };
