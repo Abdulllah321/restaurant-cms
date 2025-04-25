@@ -6,8 +6,6 @@ export function middleware(req: NextRequest) {
     // Get the cookie manually from the headers
     const token = req.cookies.get("auth-token")?.value;
 
-    console.log("middleware running!");
-
     // If token exists and user is trying to access login or signup, redirect to dashboard
     if (token && (pathname.startsWith("/login") || pathname.startsWith("/signup"))) {
         return NextResponse.redirect(new URL("/", req.url));

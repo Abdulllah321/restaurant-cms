@@ -1,28 +1,16 @@
-import { AppSidebar } from "@/components/common/Sidebar/app-sidebar"
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
-import {
-    SidebarInset,
-    SidebarProvider,
-    SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { ReactNode } from "react"
+import Sidebar from "@/components/common/Sidebar";
+import { ReactNode } from "react";
 
 export default function ProtectedLayout({ children }: { children: ReactNode }) {
     return (
-        <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset className="p-4">
-                <SidebarTrigger className="-ml-1" />
-                {children}
-            </SidebarInset>
-        </SidebarProvider>
-    )
+        <div className="flex h-screen bg-gray-100">
+            {/* Sidebar */}
+            <Sidebar className="h-full w-64 bg-sidebar" />
+
+            {/* Main content area */}
+            <main className="flex-1 p-6">
+                <div className="container mx-auto">{children}</div>
+            </main>
+        </div>
+    );
 }

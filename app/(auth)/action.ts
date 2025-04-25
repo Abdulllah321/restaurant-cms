@@ -102,6 +102,7 @@ export async function signupAction(formData: {
                 password: hashedPassword,
                 firstName,
                 lastName,
+                role: "ADMIN"
             },
         });
 
