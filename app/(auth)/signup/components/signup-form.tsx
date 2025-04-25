@@ -14,8 +14,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { signupSchema } from "@/schemas/authSchemas"; // Make sure to create a signup schema
-
+import { signupSchema } from "@/schemas/authSchemas"; // Import the signup schema
+import { signupAction } from "../../action"; // Import signup action
+import { useRouter } from "next/navigation";
 
 // Type of form data based on schema
 type SignupFormData = z.infer<typeof signupSchema>;
@@ -26,6 +27,7 @@ function SignupForm({
 }: React.ComponentPropsWithoutRef<"div">) {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const router = useRouter();
 
     // Initialize React Hook Form with Zod resolver
     const {
@@ -42,26 +44,17 @@ function SignupForm({
         setErrorMessage(null);
 
         try {
-            // Call API for signup
-            const response = await fetch('/api/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
+            const result = await signupAction(data);
 
-            const result = await response.json();
-
-            if (response.ok) {
-                // Handle success (e.g., redirect to login or dashboard page)
-                console.log("Signup successful", result);
+            if (result?.success) {
+                console.log("Signup successful");
+                // Redirect to the login page or dashboard upon success
+                router.push("/login"); // or any route you prefer after signup
             } else {
-                // Handle errors (e.g., show error message)
-                setErrorMessage(result.message || "Something went wrong!");
+                setErrorMessage(result?.error || "Something went wrong!");
             }
         } catch (error) {
-            setErrorMessage("An error occurred while submitting the form.");
+            setErrorMessage("An unexpected error occurred.");
         } finally {
             setIsLoading(false);
         }
@@ -79,18 +72,33 @@ function SignupForm({
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid gap-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2">
-
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <div className="grid gap-2">
                                     <Label htmlFor="firstName">First Name</Label>
-                                    <Input id="firstName" placeholder="First Name" {...register("firstName")} required />
-                                    {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName.message}</p>}
+                                    <Input
+                                        id="firstName"
+                                        placeholder="First Name"
+                                        {...register("firstName")}
+                                    />
+                                    {errors.firstName && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors.firstName.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="lastName">Last Name</Label>
-                                    <Input id="lastName" placeholder="Last Name" {...register("lastName")} required />
-                                    {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
+                                    <Input
+                                        id="lastName"
+                                        placeholder="Last Name"
+                                        {...register("lastName")}
+                                    />
+                                    {errors.lastName && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors.lastName.message}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
@@ -101,7 +109,6 @@ function SignupForm({
                                     type="email"
                                     placeholder="m@example.com"
                                     {...register("email")}
-                                    required
                                 />
                                 {errors.email && (
                                     <p className="text-red-500 text-sm">
@@ -117,7 +124,6 @@ function SignupForm({
                                     type="password"
                                     placeholder="Password"
                                     {...register("password")}
-                                    required
                                 />
                                 {errors.password && (
                                     <p className="text-red-500 text-sm">
@@ -133,7 +139,6 @@ function SignupForm({
                                     type="password"
                                     placeholder="Confirm Password"
                                     {...register("confirmPassword")}
-                                    required
                                 />
                                 {errors.confirmPassword && (
                                     <p className="text-red-500 text-sm">
@@ -160,4 +165,4 @@ function SignupForm({
     );
 }
 
-export default SignupForm
+export default SignupForm;

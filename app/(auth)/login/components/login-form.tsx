@@ -15,7 +15,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { loginSchema } from "@/schemas/authSchemas";
-import { loginAction } from "../action";
+import { loginAction } from "../../action";
+import { useRouter } from "next/navigation";
 
 
 // Type of form data based on schema
@@ -27,7 +28,7 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+    const router = useRouter()
     // Initialize React Hook Form with Zod resolver
     const {
         register,
@@ -48,7 +49,7 @@ export function LoginForm({
             if (result?.success) {
                 console.log("Login successful");
                 // optionally redirect or update UI state
-                // e.g. router.push('/dashboard');
+                router.push('/');
             } else {
                 setErrorMessage(result?.error || "Something went wrong!");
             }
