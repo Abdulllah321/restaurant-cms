@@ -15,6 +15,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { loginSchema } from "@/schemas/authSchemas";
+import { loginAction } from "../action";
 
 
 // Type of form data based on schema
@@ -42,26 +43,17 @@ export function LoginForm({
         setErrorMessage(null);
 
         try {
-            // Call API for login (replace with your actual API call)
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
+            const result = await loginAction(data);
 
-            const result = await response.json();
-
-            if (response.ok) {
-                // Handle success (e.g., redirect to dashboard or home page)
-                console.log("Login successful", result);
+            if (result?.success) {
+                console.log("Login successful");
+                // optionally redirect or update UI state
+                // e.g. router.push('/dashboard');
             } else {
-                // Handle errors (e.g., show error message)
-                setErrorMessage(result.message || "Something went wrong!");
+                setErrorMessage(result?.error || "Something went wrong!");
             }
         } catch (error) {
-            setErrorMessage("An error occurred while submitting the form.");
+            setErrorMessage("An unexpected error occurred.");
         } finally {
             setIsLoading(false);
         }
