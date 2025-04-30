@@ -1,7 +1,14 @@
-import { User, Clipboard, Calendar, Box, Tag, Settings, CreditCard, Store, ChevronDown, ChevronUp } from "lucide-react"; // Importing Lucide icons
+import { User, Clipboard, Calendar, Box, Tag, Settings, CreditCard, Store, ChevronDown, ChevronUp, Menu } from "lucide-react"; // Importing Lucide icons
 
 export const menuItems = [
     { name: "Users", icon: User, link: "/users" },
+    {
+        name: "Menu", icon: Menu, link: "/menus", hasSubmenu: true, subItems: [
+            { name: "Menu", link: "/menus" },
+            { name: "Menu Items", link: "/menus/items" },
+            { name: "Menu Categories", link: "/menus/categories" },
+        ]
+    },
     {
         name: "Orders", icon: Clipboard, link: "/orders", hasSubmenu: true, subItems: [
             { name: "Pending Orders", link: "/orders/pending" },

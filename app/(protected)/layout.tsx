@@ -1,14 +1,23 @@
+"use client";
+import { useState } from "react";
 import Sidebar from "@/components/common/Sidebar";
 import { ReactNode } from "react";
 
 export default function ProtectedLayout({ children }: { children: ReactNode }) {
-    return (
-        <div className="flex h-screen bg-gray-100">
-            {/* Sidebar */}
-            <Sidebar className="h-full w-64 bg-sidebar" />
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
-            {/* Main content area */}
-            <main className="flex-1 p-6">
+    const handleToggle = () => {
+        setIsCollapsed(!isCollapsed);
+    };
+
+    return (
+        <div className="flex h-screen">
+            <Sidebar isCollapsed={isCollapsed} onToggle={handleToggle} />
+
+            <main
+                className={`transition-all duration-300 flex-1 p-6 overflow-auto`}
+                style={{ marginLeft: isCollapsed ? '64px' : '256px' }}
+            >
                 <div className="container mx-auto">{children}</div>
             </main>
         </div>
