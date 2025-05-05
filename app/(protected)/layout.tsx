@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Sidebar from "@/components/common/Sidebar";
+import Header from "@/components/common/Header";
 import { ReactNode } from "react";
 
 export default function ProtectedLayout({ children }: { children: ReactNode }) {
@@ -14,12 +15,15 @@ export default function ProtectedLayout({ children }: { children: ReactNode }) {
         <div className="flex h-screen">
             <Sidebar isCollapsed={isCollapsed} onToggle={handleToggle} />
 
-            <main
-                className={`transition-all duration-300 flex-1 p-6 overflow-auto`}
-                style={{ marginLeft: isCollapsed ? '64px' : '256px' }}
-            >
-                <div className="container mx-auto">{children}</div>
-            </main>
+            {/* This div needs to be a flex column and take full width beside sidebar */}
+            <div className="flex flex-col flex-1">
+                <Header onToggle={handleToggle} isCollapsed={isCollapsed} />
+                <main className="flex-1 p-6 overflow-auto bg-gray-50">
+                    <div className="container mx-auto">
+                        {children}
+                    </div>
+                </main>
+            </div>
         </div>
     );
 }

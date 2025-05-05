@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import prisma from '@/lib/utils';
+import prisma from '@/lib/prisma';
 import { validateEmail, validatePassword } from '@/utils/validation';
 import { signupSchema } from '@/schemas/authSchemas';
 

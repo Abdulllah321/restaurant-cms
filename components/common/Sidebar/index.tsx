@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, LayoutDashboard } from "lucide-react";
 import { menuItems } from "./menuItems";
 import { topVariants, middleVariants, bottomVariants, Transition } from "./toggleButtonAnimation";
+import Link from "next/link";
 
 interface SidebarProps {
     isCollapsed: boolean;
@@ -32,49 +33,13 @@ export default function Sidebar({ isCollapsed, onToggle, className }: SidebarPro
             initial={false}
             animate={{ width: isCollapsed ? 64 : 256 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className={`h-screen bg-[var(--color-sidebar)] text-[var(--color-sidebar-foreground)] border-r border-[var(--color-sidebar-border)] flex flex-col ${className}`}
+            className={`h-screen bg-[var(--color-sidebar)] text-[var(--color-sidebar-foreground)] w-[256px] border-r border-[var(--color-sidebar-border)] flex flex-col ${className}`}
         >
             {/* Header with animated toggle button */}
-            <div className="flex items-center justify-between px-4 py-4 border-b border-[var(--color-sidebar-border)]">
+            <div className="flex items-center gap-2 px-4 py-4 border-b border-[var(--color-sidebar-border)]">
+                <LayoutDashboard size={25} />
                 {!isCollapsed && <h2 className="text-xl font-bold">Dashboard</h2>}
-                <motion.button
-                    onClick={onToggle}
-                    className="p-2 rounded-md hover:bg-[var(--color-muted)] transition-colors cursor-pointer"
-                    aria-label="Toggle Sidebar"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        className="w-6 h-6 text-[var(--color-sidebar-foreground)]"
-                        viewBox="0 0 24 24"
-                    >
-                        <motion.path
-                            initial={false}
-                            variants={topVariants}
-                            animate={isCollapsed ? "closed" : "open"}
-                            transition={Transition}
-                        />
-                        <motion.path
-                            initial={false}
-                            variants={middleVariants}
-                            animate={isCollapsed ? "closed" : "open"}
-                            transition={Transition}
-                            d="M4 12H20"
-                        />
-                        <motion.path
-                            initial={false}
-                            variants={bottomVariants}
-                            animate={isCollapsed ? "closed" : "open"}
-                            transition={Transition}
-                        />
-                    </svg>
-                </motion.button>
+
             </div>
 
             {/* Nav Items */}
@@ -110,7 +75,7 @@ export default function Sidebar({ isCollapsed, onToggle, className }: SidebarPro
                                     >
                                         {item.subItems?.map((subItem) => (
                                             <li key={subItem.name}>
-                                                <a
+                                                <Link
                                                     href={subItem.link}
                                                     className={`block px-3 py-1 rounded text-sm transition-colors 
                           ${pathname === subItem.link
@@ -118,7 +83,7 @@ export default function Sidebar({ isCollapsed, onToggle, className }: SidebarPro
                                                             : ''}`}
                                                 >
                                                     {subItem.name}
-                                                </a>
+                                                </Link>
                                             </li>
                                         ))}
                                     </motion.ul>
