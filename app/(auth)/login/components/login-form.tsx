@@ -5,6 +5,7 @@ import {
     Card,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -17,6 +18,7 @@ import { useState } from "react";
 import { loginSchema } from "@/schemas/authSchemas";
 import { loginAction } from "../../action";
 import { useRouter } from "next/navigation";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 
 // Type of form data based on schema
@@ -28,7 +30,11 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const router = useRouter()
+    const router = useRouter();
+    const [isVisible, setIsVisible] = useState<boolean>(false)
+
+    const toggleVisibility = () => setIsVisible((prevState) => !prevState)
+
     // Initialize React Hook Form with Zod resolver
     const {
         register,
@@ -72,7 +78,7 @@ export function LoginForm({
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid gap-6">
-                            <div className="grid gap-2">
+                            <div className="*:not-first:mt-2">
                                 <Label htmlFor="email">Email</Label>
                                 <Input
                                     id="email"
@@ -87,21 +93,36 @@ export function LoginForm({
                                     </p>
                                 )}
                             </div>
-                            <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                            <div className="*:not-first:mt-2">
+                                <Label htmlFor={"password"}>Show/hide password input</Label>
+                                <div className="relative">
+                                    <Input
+                                        id={"password"}
+                                        className="pe-9"
+                                        placeholder="Password"
+                                        {...register("password")}
+                                        type={isVisible ? "text" : "password"}
+                                    />
+                                    <button
+                                        className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                                        type="button"
+                                        onClick={toggleVisibility}
+                                        aria-label={isVisible ? "Hide password" : "Show password"}
+                                        aria-pressed={isVisible}
+                                        aria-controls="password"
+                                    >
+                                        {isVisible ? (
+                                            <EyeOffIcon size={16} aria-hidden="true" />
+                                        ) : (
+                                            <EyeIcon size={16} aria-hidden="true" />
+                                        )}
+                                    </button>
+                                    {errors.password && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors.password.message}
+                                        </p>
+                                    )}
                                 </div>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    {...register("password")}
-                                    required
-                                />
-                                {errors.password && (
-                                    <p className="text-red-500 text-sm">
-                                        {errors.password.message}
-                                    </p>
-                                )}
                             </div>
                             <Button type="submit" className="w-full" disabled={isLoading}>
                                 {isLoading ? "Logging in..." : "Login"}
@@ -109,14 +130,13 @@ export function LoginForm({
                         </div>
                     </form>
                 </CardContent>
+                {errorMessage && (
+                    <CardFooter>
+
+                        <div className="text-red-500 text-center text-xs mt-4">{errorMessage}</div>
+                    </CardFooter>
+                )}
             </Card>
-            {errorMessage && (
-                <div className="text-red-500 text-center text-xs mt-4">{errorMessage}</div>
-            )}
-            <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary">
-                By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-                and <a href="#">Privacy Policy</a>.
-            </div>
         </div>
     );
 }

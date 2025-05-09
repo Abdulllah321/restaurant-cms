@@ -16,15 +16,6 @@
   --popover-foreground: oklch(0.37 0.03 49.61); /* Dark text for popovers */
 
   /* Primary Color */
-<<<<<<< HEAD
-  --primary: #d32f2f; /* Vibrant red (restaurant-related, urgency) */
-  --primary-foreground: #ffffff; /* White text on primary color for clarity */
-  
-  /* Secondary Color */
-  --secondary: #ff7043; /* Warm orange to complement the red primary */
-  --secondary-foreground: #4b4b4b; /* White text for secondary actions */
-  
-=======
   --primary: oklch(0.70 0.15 162.48); /* Vibrant red (restaurant-related, urgency) */
   --primary-foreground: oklch(0 0 0); /* White text on primary color for clarity */
 
@@ -32,37 +23,23 @@
   --secondary: oklch(0.76 0.18 60.64); /* Warm orange to complement the red primary */
   --secondary-foreground: oklch(1.00 0 0); /* White text for secondary actions */
 
->>>>>>> 9a66ead61b68f775b2e700cf574d8c5c6c7f0ef7
   /* Muted and Disabled States */
   --muted: oklch(0.94 0.02 83.26); /* Soft gray for inactive elements */
   --muted-foreground: oklch(0.55 0.01 58.07); /* Darker gray for muted text */
 
   /* Accent Color */
-<<<<<<< HEAD
-  --accent: #ffb300; /* Golden yellow for highlights */
-  --accent-foreground: #333333; /* Dark text for contrast with accent color */
-  
-=======
   --accent: oklch(0.90 0.13 95.65); /* Golden yellow for highlights */
   --accent-foreground: oklch(0.32 0.04 45.49); /* Dark text for contrast with accent color */
 
->>>>>>> 9a66ead61b68f775b2e700cf574d8c5c6c7f0ef7
   /* Destructive Color */
   --destructive: oklch(0.64 0.21 25.33); /* Red for destructive actions */
   --destructive-foreground: oklch(1.00 0 0); /* White foreground text */
 
   /* Border and Ring */
-<<<<<<< HEAD
-  --border: #ddd; /* Light gray border */
-  --input: #c9c9c9; /* White input fields */
-  --ring: #ff5722; /* Warm orange ring color for focused elements */
-  
-=======
   --border: oklch(0.89 0.04 89.70); /* Light gray border */
   --input: oklch(0.89 0.04 89.70); /* White input fields */
   --ring: oklch(0.84 0.13 83.85); /* Warm orange ring color for focused elements */
 
->>>>>>> 9a66ead61b68f775b2e700cf574d8c5c6c7f0ef7
   /* Chart Colors */
   --chart-1: oklch(0.70 0.15 162.48); /* Green for positive data */
   --chart-2: oklch(0.55 0.01 58.07); /* Blue for neutral data */

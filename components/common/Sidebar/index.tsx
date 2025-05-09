@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp, LayoutDashboard } from "lucide-react";
 import { menuItems } from "./menuItems";
-import { topVariants, middleVariants, bottomVariants, Transition } from "./toggleButtonAnimation";
 import Link from "next/link";
 
 interface SidebarProps {
@@ -14,7 +13,7 @@ interface SidebarProps {
     className?: string;
 }
 
-export default function Sidebar({ isCollapsed, onToggle, className }: SidebarProps) {
+export default function Sidebar({ isCollapsed, className }: SidebarProps) {
     const pathname = usePathname();
     const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
     const router = useRouter()
@@ -33,13 +32,14 @@ export default function Sidebar({ isCollapsed, onToggle, className }: SidebarPro
             initial={false}
             animate={{ width: isCollapsed ? 64 : 256 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className={`h-screen bg-[var(--color-sidebar)] text-[var(--color-sidebar-foreground)] w-[256px] border-r border-[var(--color-sidebar-border)] flex flex-col ${className}`}
+            className={`h-screen bg-primary text-foreground w-[256px] border-r border-sidebar-border flex flex-col ${className}`}
         >
             {/* Header with animated toggle button */}
-            <div className="flex items-center gap-2 px-4 py-4 border-b border-[var(--color-sidebar-border)]">
-                <LayoutDashboard size={25} />
-                {!isCollapsed && <h2 className="text-xl font-bold">Dashboard</h2>}
-
+            <div className="px-4 py-4">
+                <div className="flex items-center gap-3 flex-nowrap">
+                    <LayoutDashboard className="w-7 h-7" />
+                    {!isCollapsed && <h2 className="text-lg font-bold">Dashboard</h2>}
+                </div>
             </div>
 
             {/* Nav Items */}
@@ -50,8 +50,8 @@ export default function Sidebar({ isCollapsed, onToggle, className }: SidebarPro
                             <button
                                 onClick={() => item.hasSubmenu ? toggleItem(item.name) : navigate(item.link)}
                                 className={`flex items-center cursor-pointer justify-between w-full px-3 py-2 rounded-md transition-colors ${pathname.includes(item.link)
-                                    ? "bg-[var(--color-sidebar-primary)] text-[var(--color-sidebar-primary-foreground)]"
-                                    : "hover:bg-[var(--color-sidebar-accent)] hover:text-[var(--color-sidebar-accent-foreground)]"
+                                    ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                                    : "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                                     }`}
                             >
                                 <div className="flex items-center gap-3">
