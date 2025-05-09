@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fira_Code, Merriweather, Oxanium } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Load the fonts with proper variable names
+const sans = Oxanium({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const serif = Merriweather({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["400", "700"], // Add appropriate weights as needed
+});
+const mono = Fira_Code({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
@@ -26,9 +31,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >        <Toaster />
-
+        className={`${sans.variable} ${serif.variable} ${mono.variable} antialiased`}
+      >
+        <Toaster />
         {children}
       </body>
     </html>
