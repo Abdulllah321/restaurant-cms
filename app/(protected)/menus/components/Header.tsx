@@ -1,6 +1,7 @@
+
+"use client";
 import {
     Breadcrumb,
-    BreadcrumbEllipsis,
     BreadcrumbItem,
     BreadcrumbLink,
     BreadcrumbList,
@@ -8,17 +9,11 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useMenus } from "@/hooks/useMenu"
 import { PlusIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export function MenuHeader() {
-    const { handleShowModal } = useMenus()
+    const router = useRouter()
     return (
         <div className="flex gap-2 items-center justify-between">
             <Breadcrumb>
@@ -33,7 +28,7 @@ export function MenuHeader() {
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <Button onClick={() => handleShowModal("create")} ><PlusIcon size={15} /> Add New Menu</Button>
+            <Button onClick={() => router.push("/menus/form/create")}><PlusIcon size={15} /> Add New Menu</Button>
         </div>
     )
 }

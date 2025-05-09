@@ -21,19 +21,19 @@
   --popover-foreground: #333333; /* Dark text for popovers */
   
   /* Primary Color */
-  --primary: #f44336; /* Vibrant red (restaurant-related, urgency) */
+  --primary: #d32f2f; /* Vibrant red (restaurant-related, urgency) */
   --primary-foreground: #ffffff; /* White text on primary color for clarity */
   
   /* Secondary Color */
-  --secondary: #ff9800; /* Warm orange to complement the red primary */
-  --secondary-foreground: #ffffff; /* White text for secondary actions */
+  --secondary: #ff7043; /* Warm orange to complement the red primary */
+  --secondary-foreground: #4b4b4b; /* White text for secondary actions */
   
   /* Muted and Disabled States */
   --muted: #e0e0e0; /* Soft gray for inactive elements */
   --muted-foreground: #757575; /* Darker gray for muted text */
   
   /* Accent Color */
-  --accent: #ffeb3b; /* Golden yellow for highlights */
+  --accent: #ffb300; /* Golden yellow for highlights */
   --accent-foreground: #333333; /* Dark text for contrast with accent color */
   
   /* Destructive Color */
@@ -42,7 +42,7 @@
   
   /* Border and Ring */
   --border: #ddd; /* Light gray border */
-  --input: #ffffff; /* White input fields */
+  --input: #c9c9c9; /* White input fields */
   --ring: #ff5722; /* Warm orange ring color for focused elements */
   
   /* Chart Colors */

@@ -2,19 +2,31 @@
 
 import prisma from '@/lib/prisma'; // Adjust path to your Prisma instance
 import { revalidatePath } from 'next/cache'; // optional, for cache revalidation
+import { menuSchema } from './schemas';
+import { redirect } from 'next/navigation';
 
 // CREATE
-export async function createMenu(data: { name: string; description?: string }) {
-    try {
-        const newMenu = await prisma.menu.create({
-            data,
-        });
-        revalidatePath('/menus'); // optional
-        return newMenu;
-    } catch (error) {
-        console.error('Create menu error:', error);
-        throw error;
+export async function createMenu(_: unknown, formData: FormData) {
+    const name = formData.get('name') as string;
+    const description = formData.get('description') as string;
+
+    const validation = menuSchema.safeParse({ name, description });
+
+    if (!validation.success) {
+        return { errors: validation.error.flatten().fieldErrors };
     }
+
+    // Simulate saving to a database
+    const newMenu = {
+        name,
+        description,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    };
+    await prisma.menu.create({ data: newMenu })
+
+    // Redirect to the new menu page
+    redirect(`/menus`);
 }
 
 // READ
