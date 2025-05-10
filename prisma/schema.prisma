@@ -53,28 +53,33 @@ enum SocialProvider {
   TWITTER
   GITHUB
   APPLE
-  // Add other providers as needed
 }
 
 model Menu {
   id          String     @id @default(cuid())
   name        String
   description String?
-  categories  Category[]
-  items       MenuItem[]
+  branchId    String
+  branch      Branch     @relation(fields: [branchId], references: [id])
+  categories  Category[] // Categories associated with this menu
+  items       MenuItem[] // Items directly linked to this menu
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-
-  Branch Branch[]
 }
+
 
 model Category {
-  id     String     @id @default(cuid())
-  name   String
-  menuId String
-  menu   Menu       @relation(fields: [menuId], references: [id])
-  items  MenuItem[]
+  id        String     @id @default(cuid())
+  name      String
+  menuId    String
+  menu      Menu       @relation(fields: [menuId], references: [id])
+  branchId  String
+  branch    Branch     @relation(fields: [branchId], references: [id]) // Link to the branch
+  items     MenuItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
+
 
 model MenuItem {
   id          String   @id @default(cuid())
@@ -83,14 +88,17 @@ model MenuItem {
   price       Float
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
+  menuId      String
+  menu        Menu     @relation(fields: [menuId], references: [id])
+  branchId    String
+  branch      Branch   @relation(fields: [branchId], references: [id]) // Add Branch relationship
   imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  Menu Menu[]
-
   OrderItem OrderItem[]
 }
+
 
 model Order {
   id         String      @id @default(cuid())
@@ -282,6 +290,10 @@ model Branch {
   reservations Reservation[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+
+  Category Category[]
+
+  MenuItem MenuItem[]
 }
 
 model Feedback {
