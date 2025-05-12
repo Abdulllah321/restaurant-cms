@@ -1,19 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getBranchCount } from "./actions/branch.action";
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
-
-    // Get the cookie manually from the headers
     const token = req.cookies.get("auth-token")?.value;
 
-    // If token exists and user is trying to access login or signup, redirect to dashboard
+    // Redirect logged-in users away from login or signup
     if (token && (pathname.startsWith("/login") || pathname.startsWith("/signup"))) {
         return NextResponse.redirect(new URL("/", req.url));
     }
 
-    // If no token and accessing protected routes (anything other than login/signup), redirect to login
-    if (!token && !pathname.startsWith("/login") && !pathname.startsWith("/signup")) {
+    // Redirect unauthenticated users to login
+    if (!token && !pathname.startsWith("/login") && !pathname.startsWith("/signup") && !pathname.startsWith("/branch/create")) {
         return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    // Check branch count if not on login, signup, or branches page
+    if (!pathname.startsWith("/login") && !pathname.startsWith("/signup") && !pathname.startsWith("/branch/create")) {
+        const branchCount = await getBranchCount();
+        if (branchCount.success && branchCount.count === 0) {
+            return NextResponse.redirect(new URL("/branch/create", req.url));
+        }
     }
 
     return NextResponse.next();

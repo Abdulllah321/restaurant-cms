@@ -12,16 +12,37 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ChevronDown, ChevronUp, LayoutDashboard } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { menuItems } from "@/data/menuItems";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { BranchSwitcher } from "./branch-switcher";
+import { getAllBranches } from "@/actions/branch.action";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const [openMenus, setOpenMenus] = React.useState<{ [key: string]: boolean }>(
     {}
   );
+  const [branches, setBranches] = React.useState<BranchSwitcher[]>([]);
+
+  async function getBranches() {
+    const branchData = await getAllBranches();
+
+    const formattedBranches =
+      branchData.branches?.map((branch) => ({
+        logo: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          branch.name
+        )}&background=random`,
+        ...branch,
+      })) || [];
+
+    setBranches(formattedBranches);
+  }
+
+  React.useEffect(() => {
+    getBranches();
+  }, []);
 
   const toggleSubMenu = (name: string) => {
     setOpenMenus((prev) => ({ ...prev, [name]: !prev[name] }));
@@ -30,8 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props} className="dark !border-none">
       <SidebarHeader className="flex items-center gap-3 flex-row flex-nowrap text-sidebar-accent px-4 pt-4">
-        <LayoutDashboard className="w-7 h-7" />
-        <h2 className="text-lg font-bold">Dashboard</h2>
+        <BranchSwitcher branches={branches} getBranches={getBranches} />
       </SidebarHeader>
       <SidebarContent>
         {/* We only show the first parent group */}
@@ -44,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               {menuItems.map((item) => {
                 const isActive = pathname === item.link;
                 return (
-                  <>
+                  <React.Fragment key={item.name}>
                     <SidebarMenuItem key={item.name}>
                       <SidebarMenuButton
                         asChild
@@ -85,6 +105,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </SidebarMenuItem>
                     {item.hasSubmenu && (
                       <div
+                        key={`${item.name}-submenu`}
                         className={`overflow-hidden transition-all duration-300 ${
                           openMenus[item.name]
                             ? "max-h-60 opacity-100"
@@ -92,10 +113,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         }`}
                       >
                         {item.subItems.map((subItem) => (
-                          <SidebarMenuItem key={subItem.link}>
+                          <SidebarMenuItem key={`${subItem.link}-subitem`}>
                             <SidebarMenuButton
                               asChild
-                              className={`group/menu-button font-medium gap-3 h-9 rounded-md hover:bg-sidebar-primary/10 ${pathname === subItem.link ? "hover:text-primary" : "hover:text-sidebar-foreground"} [&>svg]:size-auto ${
+                              className={`group/menu-button font-medium gap-3 h-9 rounded-md hover:bg-sidebar-primary/10 ${
+                                pathname === subItem.link
+                                  ? "hover:text-primary"
+                                  : "hover:text-sidebar-foreground"
+                              } [&>svg]:size-auto ${
                                 pathname === subItem.link
                                   ? "text-primary font-bold"
                                   : "text-sidebar-foreground/70"
@@ -112,7 +137,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         ))}
                       </div>
                     )}
-                  </>
+                  </React.Fragment>
                 );
               })}
             </SidebarMenu>

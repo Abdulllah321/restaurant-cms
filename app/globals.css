@@ -6,57 +6,79 @@
 
 :root {
   /* Background and Foreground */
-  --background: oklch(0.99 0.01 84.57); /* Soft off-white background for a clean look */
+  --background: oklch(
+    0.99 0.01 84.57
+  ); /* Soft off-white background for a clean look */
   --foreground: oklch(0.37 0.03 49.61); /* Dark gray text for good contrast */
 
   /* Card & Popover */
   --card: oklch(0.97 0.01 78.28); /* White card for clean, crisp look */
-  --card-foreground: oklch(0.37 0.03 49.61); /* Dark text for contrast in cards */
+  --card-foreground: oklch(
+    0.37 0.03 49.61
+  ); /* Dark text for contrast in cards */
   --popover: oklch(0.97 0.01 78.28); /* Light background for popovers */
   --popover-foreground: oklch(0.37 0.03 49.61); /* Dark text for popovers */
 
   /* Primary Color */
-  --primary: oklch(0.70 0.15 162.48); /* Vibrant red (restaurant-related, urgency) */
-  --primary-foreground: oklch(0 0 0); /* White text on primary color for clarity */
+  --primary: oklch(
+    0.7 0.15 162.48
+  ); /* Vibrant red (restaurant-related, urgency) */
+  --primary-foreground: oklch(
+    0 0 0
+  ); /* White text on primary color for clarity */
 
   /* Secondary Color */
-  --secondary: oklch(0.76 0.18 60.64); /* Warm orange to complement the red primary */
-  --secondary-foreground: oklch(1.00 0 0); /* White text for secondary actions */
+  --secondary: oklch(
+    0.76 0.18 60.64
+  ); /* Warm orange to complement the red primary */
+  --secondary-foreground: oklch(1 0 0); /* White text for secondary actions */
 
   /* Muted and Disabled States */
   --muted: oklch(0.94 0.02 83.26); /* Soft gray for inactive elements */
   --muted-foreground: oklch(0.55 0.01 58.07); /* Darker gray for muted text */
 
   /* Accent Color */
-  --accent: oklch(0.90 0.13 95.65); /* Golden yellow for highlights */
-  --accent-foreground: oklch(0.32 0.04 45.49); /* Dark text for contrast with accent color */
+  --accent: oklch(0.9 0.13 95.65); /* Golden yellow for highlights */
+  --accent-foreground: oklch(
+    0.32 0.04 45.49
+  ); /* Dark text for contrast with accent color */
 
   /* Destructive Color */
   --destructive: oklch(0.64 0.21 25.33); /* Red for destructive actions */
-  --destructive-foreground: oklch(1.00 0 0); /* White foreground text */
+  --destructive-foreground: oklch(1 0 0); /* White foreground text */
 
   /* Border and Ring */
-  --border: oklch(0.89 0.04 89.70); /* Light gray border */
-  --input: oklch(0.89 0.04 89.70); /* White input fields */
-  --ring: oklch(0.84 0.13 83.85); /* Warm orange ring color for focused elements */
+  --border: oklch(0.89 0.04 89.7); /* Light gray border */
+  --input: oklch(0.89 0.04 89.7); /* White input fields */
+  --ring: oklch(
+    0.84 0.13 83.85
+  ); /* Warm orange ring color for focused elements */
 
   /* Chart Colors */
-  --chart-1: oklch(0.70 0.15 162.48); /* Green for positive data */
+  --chart-1: oklch(0.7 0.15 162.48); /* Green for positive data */
   --chart-2: oklch(0.55 0.01 58.07); /* Blue for neutral data */
-  --chart-3: oklch(0.55 0.12 66.44); /* Yellow for warnings or attention-grabbing */
+  --chart-3: oklch(
+    0.55 0.12 66.44
+  ); /* Yellow for warnings or attention-grabbing */
   --chart-4: oklch(0.55 0.01 58.07); /* Purple for special data categories */
   --chart-5: oklch(0.68 0.14 75.83); /* Orange for intermediate data */
 
   /* Sidebar */
-  --sidebar: oklch(0.94 0.02 83.26); /* Light sidebar for a clean and modern look */
+  --sidebar: oklch(
+    0.94 0.02 83.26
+  ); /* Light sidebar for a clean and modern look */
   --sidebar-foreground: oklch(0.37 0.03 49.61); /* Dark text in the sidebar */
-  --sidebar-primary: oklch(0.70 0.15 162.48); /* Red sidebar primary color */
-  --sidebar-primary-foreground: oklch(0 0 0); /* White text on sidebar primary */
-  --sidebar-accent: oklch(0.90 0.13 95.65); /* Orange sidebar accents */
-  --sidebar-accent-foreground: oklch(0.32 0.04 45.49); /* Dark text for sidebar accents */
+  --sidebar-primary: oklch(0.7 0.15 162.48); /* Red sidebar primary color */
+  --sidebar-primary-foreground: oklch(
+    0 0 0
+  ); /* White text on sidebar primary */
+  --sidebar-accent: oklch(0.8 0.2 90); /* Rich dark yellow */
+  --sidebar-accent-foreground: oklch(
+    0.32 0.04 45.49
+  ); /* Dark text for sidebar accents */
 
   /* Border and Ring */
-  --sidebar-border: oklch(0.89 0.04 89.70); /* Light gray border in sidebar */
+  --sidebar-border: oklch(0.89 0.04 89.7); /* Light gray border in sidebar */
   --sidebar-ring: oklch(0.84 0.13 83.85); /* Warm orange for sidebar focus */
 
   --radius: 0.3rem; /* Rounded corners for softer design */
@@ -73,11 +95,16 @@
   --spacing: 0.25rem;
   --shadow-2xs: 0px 2px 3px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0px 2px 3px 0px hsl(0 0% 0% / 0.09);
-  --shadow-sm: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
-  --shadow: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
-  --shadow-md: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 2px 4px -1px hsl(0 0% 0% / 0.18);
-  --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 4px 6px -1px hsl(0 0% 0% / 0.18);
-  --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 8px 10px -1px hsl(0 0% 0% / 0.18);
+  --shadow-sm: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 1px 2px -1px hsl(0 0% 0% / 0.18);
+  --shadow: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 1px 2px -1px hsl(0 0% 0% / 0.18);
+  --shadow-md: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 2px 4px -1px hsl(0 0% 0% / 0.18);
+  --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 4px 6px -1px hsl(0 0% 0% / 0.18);
+  --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 8px 10px -1px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.45);
   --tracking-normal: 0em;
 }
@@ -85,28 +112,34 @@
 .dark {
   /* Dark mode colors */
   --background: oklch(0.22 0.01 56.04); /* Dark gray background for dark mode */
-  --foreground: oklch(0.97 0.00 106.42); /* Light text in dark mode */
+  --foreground: oklch(0.97 0 106.42); /* Light text in dark mode */
 
-  --card: oklch(0.27 0.01 34.30); /* Dark card background */
-  --card-foreground: oklch(0.97 0.00 106.42); /* Light text in dark mode cards */
+  --card: oklch(0.27 0.01 34.3); /* Dark card background */
+  --card-foreground: oklch(0.97 0 106.42); /* Light text in dark mode cards */
 
-  --popover: oklch(0.27 0.01 34.30); /* Dark background for popovers */
-  --popover-foreground: oklch(0.97 0.00 106.42); /* Light text for popovers */
+  --popover: oklch(0.27 0.01 34.3); /* Dark background for popovers */
+  --popover-foreground: oklch(0.97 0 106.42); /* Light text for popovers */
 
-  --primary: oklch(0.70 0.15 162.48); /* Warm orange-red for primary in dark mode */
+  --primary: oklch(
+    0.7 0.15 162.48
+  ); /* Warm orange-red for primary in dark mode */
   --primary-foreground: oklch(0 0 0); /* White text for primary */
 
   --secondary: oklch(0.44 0.01 73.64); /* Warm orange remains for secondary */
-  --secondary-foreground: oklch(0.92 0.00 48.72); /* White text */
+  --secondary-foreground: oklch(0.92 0 48.72); /* White text */
 
-  --muted: oklch(0.27 0.01 34.30); /* Dark muted background for dark mode */
+  --muted: oklch(0.27 0.01 34.3); /* Dark muted background for dark mode */
   --muted-foreground: oklch(0.72 0.01 56.26); /* Dark gray text for muted */
 
-  --accent: oklch(0.90 0.13 95.65); /* Bright yellow for accents */
+  --accent: oklch(0.9 0.13 95.65); /* Bright yellow for accents */
   --accent-foreground: oklch(0.32 0.04 45.49); /* Dark text on accent */
 
-  --destructive: oklch(0.64 0.21 25.33); /* Red for destructive actions in dark mode */
-  --destructive-foreground: oklch(1.00 0 0); /* White text for destructive actions */
+  --destructive: oklch(
+    0.64 0.21 25.33
+  ); /* Red for destructive actions in dark mode */
+  --destructive-foreground: oklch(
+    1 0 0
+  ); /* White text for destructive actions */
 
   --border: oklch(0.37 0.01 67.56); /* Darker border for dark mode */
   --input: oklch(0.37 0.01 67.56); /* Dark input fields */
@@ -114,15 +147,15 @@
 
   --chart-1: oklch(0.77 0.15 163.22); /* Green for positive data */
   --chart-2: oklch(0.68 0.15 237.32); /* Blue for neutral data */
-  --chart-3: oklch(0.80 0.16 86.05); /* Yellow for attention-grabbing data */
+  --chart-3: oklch(0.8 0.16 86.05); /* Yellow for attention-grabbing data */
   --chart-4: oklch(0.72 0.01 56.26); /* Purple for special data */
   --chart-5: oklch(0.55 0.01 58.07); /* Orange for intermediate data */
 
-  --sidebar: oklch(0.27 0.01 34.30); /* Dark sidebar */
-  --sidebar-foreground: oklch(0.97 0.00 106.42); /* Light text in sidebar */
-  --sidebar-primary: oklch(0.70 0.15 162.48); /* Warm orange-red for sidebar */
+  --sidebar: oklch(0.27 0.01 34.3); /* Dark sidebar */
+  --sidebar-foreground: oklch(0.97 0 106.42); /* Light text in sidebar */
+  --sidebar-primary: oklch(0.7 0.15 162.48); /* Warm orange-red for sidebar */
   --sidebar-primary-foreground: oklch(0 0 0); /* White text */
-  --sidebar-accent: oklch(0.90 0.13 95.65); /* Orange sidebar accent */
+  --sidebar-accent: oklch(0.9 0.13 95.65); /* Orange sidebar accent */
   --sidebar-accent-foreground: oklch(0.32 0.04 45.49); /* Dark text on accent */
 
   --sidebar-border: oklch(0.37 0.01 67.56); /* Dark border for sidebar */
@@ -141,11 +174,16 @@
   --spacing: 0.25rem;
   --shadow-2xs: 0px 2px 3px 0px hsl(0 0% 0% / 0.09);
   --shadow-xs: 0px 2px 3px 0px hsl(0 0% 0% / 0.09);
-  --shadow-sm: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
-  --shadow: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
-  --shadow-md: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 2px 4px -1px hsl(0 0% 0% / 0.18);
-  --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 4px 6px -1px hsl(0 0% 0% / 0.18);
-  --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.18), 0px 8px 10px -1px hsl(0 0% 0% / 0.18);
+  --shadow-sm: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 1px 2px -1px hsl(0 0% 0% / 0.18);
+  --shadow: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 1px 2px -1px hsl(0 0% 0% / 0.18);
+  --shadow-md: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 2px 4px -1px hsl(0 0% 0% / 0.18);
+  --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 4px 6px -1px hsl(0 0% 0% / 0.18);
+  --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.18),
+    0px 8px 10px -1px hsl(0 0% 0% / 0.18);
   --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.45);
 }
 

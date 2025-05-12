@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import prisma from '@/lib/prisma';
+import {prisma} from '@/lib/prisma';
 import { validateEmail, validatePassword } from '@/utils/validation';
 import { signupSchema } from '@/schemas/authSchemas';
 
@@ -52,7 +52,6 @@ export async function loginAction(formData: { email: string; password: string })
             sameSite: 'strict',
         });
 
-        // Optionally redirect to a dashboard or return success
         return { success: true };
     } catch (error) {
         console.error('[LOGIN_ERROR]', error);
@@ -83,6 +82,10 @@ export async function signupAction(formData: {
 
     if (!validatePassword(password)) {
         return { error: 'Password is too weak' };
+    }
+
+    if(password !== confirmPassword){
+        return {error : "Password don't match"}
     }
 
     try {
