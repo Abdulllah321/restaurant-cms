@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getBranchCount } from "./actions/branch.action";
+import { getBranchCount } from "./actions/branch.actions";
 
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;

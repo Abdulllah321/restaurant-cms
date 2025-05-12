@@ -1,6 +1,6 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import { branchSchema } from "@/schemas/branch.schema";
+import { branchSchema } from "@/schemas/branch.schemas";
 import { z } from "zod";
 
 // Create Branch

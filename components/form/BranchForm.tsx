@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { createBranch, updateBranch } from "@/actions/branch.action";
+import { createBranch, updateBranch } from "@/actions/branch.actions";
 
 export type BranchFields = {
   id?: string;

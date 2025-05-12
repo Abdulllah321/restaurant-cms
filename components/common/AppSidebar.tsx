@@ -17,7 +17,7 @@ import { menuItems } from "@/data/menuItems";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { BranchSwitcher } from "./branch-switcher";
-import { getAllBranches } from "@/actions/branch.action";
+import { getAllBranches } from "@/actions/branch.actions";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -62,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupContent className="px-2">
             <SidebarMenu>
               {menuItems.map((item) => {
-                const isActive = pathname === item.link;
+                const isActive = item.link === "/" ? pathname === item.link : pathname.startsWith(item.link);
                 return (
                   <React.Fragment key={item.name}>
                     <SidebarMenuItem key={item.name}>
@@ -106,25 +106,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     {item.hasSubmenu && (
                       <div
                         key={`${item.name}-submenu`}
-                        className={`overflow-hidden transition-all duration-300 ${
-                          openMenus[item.name]
-                            ? "max-h-60 opacity-100"
-                            : "max-h-0 opacity-0"
-                        }`}
+                        className={`overflow-hidden transition-all duration-300 ${openMenus[item.name]
+                          ? "max-h-60 opacity-100"
+                          : "max-h-0 opacity-0"
+                          }`}
                       >
                         {item.subItems.map((subItem) => (
                           <SidebarMenuItem key={`${subItem.link}-subitem`}>
                             <SidebarMenuButton
                               asChild
-                              className={`group/menu-button font-medium gap-3 h-9 rounded-md hover:bg-sidebar-primary/10 ${
-                                pathname === subItem.link
-                                  ? "hover:text-primary"
-                                  : "hover:text-sidebar-foreground"
-                              } [&>svg]:size-auto ${
-                                pathname === subItem.link
+                              className={`group/menu-button font-medium gap-3 h-9 rounded-md hover:bg-sidebar-primary/10 ${pathname === subItem.link
+                                ? "hover:text-primary"
+                                : "hover:text-sidebar-foreground"
+                                } [&>svg]:size-auto ${pathname === subItem.link
                                   ? "text-primary font-bold"
                                   : "text-sidebar-foreground/70"
-                              }`}
+                                }`}
                             >
                               <Link
                                 href={subItem.link}

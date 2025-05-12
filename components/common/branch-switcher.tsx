@@ -30,7 +30,8 @@ import {
   ContextMenuTrigger,
 } from "../ui/context-menu";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
-import { deleteBranch } from "@/actions/branch.action";
+import { deleteBranch } from "@/actions/branch.actions";
+import { BRANCH_LOCAL_STORAGE_KEY } from "@/data/constants";
 
 // Branch Type Definition
 export interface BranchSwitcher {
@@ -47,7 +48,6 @@ interface BranchSwitcherProps {
 }
 
 // Local Storage Key
-const LOCAL_STORAGE_KEY = "selectedBranch";
 
 export function BranchSwitcher({ branches, getBranches }: BranchSwitcherProps) {
   const [activeBranch, setActiveBranch] = React.useState<BranchSwitcher | null>(
@@ -61,7 +61,7 @@ export function BranchSwitcher({ branches, getBranches }: BranchSwitcherProps) {
 
   // Load selected branch from local storage on mount
   React.useEffect(() => {
-    const savedBranch = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const savedBranch = localStorage.getItem(BRANCH_LOCAL_STORAGE_KEY);
     if (savedBranch) {
       try {
         const parsedBranch = JSON.parse(savedBranch) as BranchSwitcher;
@@ -79,7 +79,7 @@ export function BranchSwitcher({ branches, getBranches }: BranchSwitcherProps) {
   // Save selected branch to local storage
   const handleBranchSelect = (branch: BranchSwitcher) => {
     setActiveBranch(branch);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(branch));
+    localStorage.setItem(BRANCH_LOCAL_STORAGE_KEY, JSON.stringify(branch));
   };
 
   // Handle branch form success
