@@ -6,18 +6,21 @@ import {
 } from "@/actions/categories.actions";
 import ToggleSelector from "@/components/common/ToggleSelector";
 import { fetchSelectedBranch } from "@/data/constants";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 const Categories = ({
   selectedCategories,
   handleToggleCategory,
   handleAddCategory,
+  categories,
+  setCategories
 }: {
   selectedCategories: string[];
   handleToggleCategory: (id: string) => void;
   handleAddCategory?: () => void;
+  categories: Category[];
+  setCategories: Dispatch<SetStateAction<Category[]>>
 }) => {
-  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true); // Start with true since we're loading initially
   const [branchId, setBranchId] = useState<string | null>(null);
 
@@ -38,7 +41,7 @@ const Categories = ({
       try {
         const result = await getCategoriesByBranch(branchId);
         if (result) {
-          setCategories(result as Category);
+          setCategories(result as Category[]);
         }
       } catch (error) {
         console.error("Failed to fetch categories:", error);

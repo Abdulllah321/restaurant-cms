@@ -21,6 +21,9 @@ interface Category {
   menus: Menu[];
   items: MenuItem[];
   MenuCategory: MenuCategory[];
+  _count?: {
+    items: number
+  }
 }
 
 interface MenuCategory {

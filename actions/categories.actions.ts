@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { categorySchema } from "@/schemas/menu.schemas";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 
@@ -25,11 +26,10 @@ export async function createCategory(_: unknown, formData: FormData) {
       data: {
         name: data.name,
         branchId: data.branchId,
-      },
-      include: {
-        branch: true, // Include branch information
-      },
+      }
     });
+
+    revalidatePath('/menus/create');
 
     return { success: true, category };
   } catch (error) {
