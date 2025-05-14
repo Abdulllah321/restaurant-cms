@@ -1,34 +1,55 @@
-interface Category {
-  id: string;
-  name: string;
-  menuId: string;
-  menu: Menu; // Relationship with Menu
-  items: MenuItem[]; // One-to-many relation with MenuItem
-}
-
-interface MenuItem {
-  id: string;
-  name: string;
-  description?: string;
-  price: number;
-  categoryId: string;
-  category: Category; // Relationship with Category
-  imageUrl?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  Menu: Menu[]; // Many-to-many relationship with Menu
-}
-
+// Menu Type
 interface Menu {
   id: string;
   name: string;
-  description?: string;
-  categories: Category[]; // One-to-many relation with Category
-  items: MenuItem[]; // One-to-many relation with MenuItem
-  Branch: Branch[]; // Many-to-many relationship with Branch
+  description?: string | null;
+  branchId: string;
   createdAt: Date;
   updatedAt: Date;
+  categories: Category[];
+  items: MenuItem[];
+  MenuCategory: MenuCategory[];
 }
+
+// interface
+interface Category {
+  id: string;
+  name: string;
+  branchId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  menus: Menu[];
+  items: MenuItem[];
+  MenuCategory: MenuCategory[];
+}
+
+interface MenuCategory {
+  id: string;
+  menuId: string;
+  categoryId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  menu: Menu;
+  category: Category;
+}
+
+// interface
+interface MenuItem {
+  id: string;
+  name: string;
+  description?: string | null;
+  price: number;
+  categoryId: string;
+  menuId: string;
+  branchId: string;
+  imageUrl?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  category: Category;
+  menu: Menu;
+  OrderItem: OrderItem[];
+}
+
 interface Branch {
   id: string;
   name: string;

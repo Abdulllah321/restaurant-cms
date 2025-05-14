@@ -32,7 +32,7 @@ export function ReusableDialog({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={closeDialog}  
+            onClick={closeDialog}
           >
             <motion.div
               className="bg-card rounded-lg shadow-lg p-6 w-full max-w-md relative"
@@ -43,6 +43,7 @@ export function ReusableDialog({
               onClick={(e) => e.stopPropagation()} // Prevent closing on content click
             >
               <button
+                type="button"
                 onClick={closeDialog}
                 className="absolute top-3 right-3 p-1 rounded-full bg-foreground/20 cursor-pointer"
               >
@@ -50,7 +51,9 @@ export function ReusableDialog({
               </button>
               <div className="mb-4">
                 <h2 className="text-xl font-semibold text-primary">{title}</h2>
-                {subTitle && <p className="text-sm text-muted-foreground">{subTitle}</p>}
+                {subTitle && (
+                  <p className="text-sm text-muted-foreground">{subTitle}</p>
+                )}
               </div>
               <div className="flex flex-col gap-4">{children}</div>
             </motion.div>

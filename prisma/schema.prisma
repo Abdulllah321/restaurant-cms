@@ -2,7 +2,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db { 
+datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
@@ -56,27 +56,39 @@ enum SocialProvider {
 }
 
 model Menu {
-  id          String     @id @default(cuid())
-  name        String
-  description String?
-  branchId    String
-  branch      Branch     @relation(fields: [branchId], references: [id])
-  categories  Category[] // Categories associated with this menu
-  items       MenuItem[] // Items directly linked to this menu
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id             String         @id @default(cuid())
+  name           String
+  description    String?
+  branchId       String
+  branch         Branch         @relation(fields: [branchId], references: [id])
+  menuCategories MenuCategory[]
+  items          MenuItem[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model Category {
-  id        String     @id @default(cuid())
-  name      String
-  menuId    String
-  menu      Menu       @relation(fields: [menuId], references: [id])
-  branchId  String
-  branch    Branch     @relation(fields: [branchId], references: [id]) // Link to the branch
-  items     MenuItem[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id             String         @id @default(cuid())
+  name           String
+  branchId       String
+  branch         Branch         @relation(fields: [branchId], references: [id])
+  menuCategories MenuCategory[]
+  items          MenuItem[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model MenuCategory {
+  id         String   @id @default(cuid())
+  menuId     String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  menu     Menu     @relation(fields: [menuId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([menuId, categoryId])
 }
 
 model MenuItem {
@@ -96,7 +108,6 @@ model MenuItem {
 
   OrderItem OrderItem[]
 }
-
 
 model Order {
   id         String      @id @default(cuid())
