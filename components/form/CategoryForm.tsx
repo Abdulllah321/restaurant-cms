@@ -1,5 +1,5 @@
 import { Label } from "@radix-ui/react-label";
-import React, { useActionState, useEffect, useId } from "react";
+import React, { useActionState} from "react";
 import { Input } from "../ui/input";
 import { createCategory, updateCategory } from "@/actions/categories.actions";
 import { Button } from "../ui/button";
@@ -23,7 +23,9 @@ const CategoryForm = ({
     const response = selectedCategory
       ? await updateCategory(_, formData)
       : await createCategory(_, formData);
-    onAdd && onAdd(response.category as Category);
+    if (onAdd) {
+      onAdd(response.category as Category);
+    }
 
     return response;
   }

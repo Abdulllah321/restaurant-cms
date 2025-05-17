@@ -1,7 +1,6 @@
-"use client";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { JSX, useEffect, useState } from "react";
-import { ChevronDown, Plus } from "lucide-react"; // Added Plus icon
+import { ChevronDown, PlusCircle } from "lucide-react"; // Optional: for rotating toggle icon
 
 import AnimatedCheckmark from "./AnimatedCheck";
 import { Button } from "../ui/button";
@@ -11,29 +10,30 @@ interface ToggleSelectorProps<T> {
   items: T[];
   selectedItems: string[];
   onToggle: (id: string) => void;
-  onAdd?: () => void; // New prop for add functionality
-  addButtonLabel?: string; // Custom label for add button
   getLabel: (item: T) => string;
   getId: (item: T) => string;
   getParentId: (item: T) => string | null;
+  getCount?: (item: T) => number;
   className?: string;
   loading?: boolean;
+  onAdd?: () => void;
+  addButtonLabel?: string;
 }
 
 const ToggleSelector = <T,>({
   items,
   selectedItems,
   onToggle,
-  onAdd,
-  addButtonLabel = "Add New", // Default label
   getLabel,
   getId,
+  getCount,
   getParentId,
   className = "",
   loading = false,
+  onAdd,
+  addButtonLabel = "Add New",
 }: ToggleSelectorProps<T>) => {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-
   const groupedItems = items.reduce((acc, item) => {
     const parentId = getParentId(item) || "root";
     if (!acc[parentId]) acc[parentId] = [];
@@ -47,7 +47,7 @@ const ToggleSelector = <T,>({
       if (parentId !== "root") expandedMap[parentId] = true;
     });
     setExpanded(expandedMap);
-  }, [items]);
+  }, []);
 
   const renderItems = (parentId = "root", depth = 0): JSX.Element[] => {
     const children = groupedItems[parentId] || [];
@@ -55,6 +55,7 @@ const ToggleSelector = <T,>({
     return children.map((item) => {
       const id = getId(item);
       const label = getLabel(item);
+      const count = getCount && getCount(item) || null;
       const isSelected = selectedItems.includes(id);
       const hasChildren = groupedItems[id]?.length > 0;
       const isExpanded = expanded[id];
@@ -69,10 +70,10 @@ const ToggleSelector = <T,>({
               transition={{ duration: 0.2 }}
             >
               <Button
-                type="button"
                 color={isSelected ? "primary" : "default"}
                 variant={isSelected ? "default" : "outline"}
                 onClick={() => onToggle(id)}
+                type="button"
                 className="relative text-sm min-w-[140px] transition-colors"
               >
                 <span className="absolute -translate-y-1/2 left-3 top-1/2">
@@ -89,6 +90,11 @@ const ToggleSelector = <T,>({
                 >
                   {label}
                 </motion.span>
+                {count && (
+                  <span className="border-primary-foreground/30 text-primary-foreground/60 ms-1 -me-1 inline-flex h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
+                    {count}
+                  </span>
+                )}
               </Button>
             </motion.div>
 
@@ -101,7 +107,7 @@ const ToggleSelector = <T,>({
                   }))
                 }
                 type="button"
-                className="flex items-center gap-1 text-xs truncate transition text-zinc-400 hover:text-white"
+                className="flex items-center gap-1 text-xs truncate transition text-zinc-400 hover:text-white "
               >
                 <motion.div
                   animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -136,34 +142,23 @@ const ToggleSelector = <T,>({
   };
 
   return (
-    <div className={`space-y-4 ${className}`}>
-      <div className="flex flex-col md:flex-row md:flex-wrap md:gap-6">
-        {loading
-          ? Array.from({ length: 4 }).map((_, index) => (
-              <Skeleton key={index} className="w-24 h-10 mb-2 rounded-lg" />
-            ))
-          : renderItems()}
-      </div>
-
-      {/* Add button at the bottom */}
+    <div
+      className={`flex flex-col md:flex-row md:flex-wrap md:gap-6 mt-4 ${className}`}
+    >
+      {loading
+        ? Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className="w-24 h-10 mb-2 rounded-lg" />
+          ))
+        : renderItems()}
       {onAdd && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className="pt-2 border-zinc-700"
-        >
-          <Button
-            variant="secondary"
-            onClick={onAdd}
-            type="button"
-
-            // className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white"
-          >
-            <Plus size={16} />
-            {addButtonLabel}
-          </Button>
-        </motion.div>
+        <Button type="button" onClick={onAdd} className="shadow-sm ">
+          <PlusCircle
+            className="opacity-60 sm:-ms-1"
+            size={16}
+            aria-hidden="true"
+          />
+          {addButtonLabel}
+        </Button>
       )}
     </div>
   );

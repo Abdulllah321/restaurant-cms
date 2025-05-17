@@ -1,6 +1,9 @@
 import { useId } from "react";
 import { Label } from "@/components/ui/label";
 import MultipleSelector, { Option } from "@/components/ui/multiselect";
+import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
+import { PlusCircle } from "lucide-react";
 
 interface MultiSelectWidgetProps {
   label?: string;
@@ -14,6 +17,7 @@ interface MultiSelectWidgetProps {
   commandLabel?: string;
   disabled?: boolean;
   className?: string;
+  handleNewItem?: () => void;
 }
 
 export default function MultiSelectWidget({
@@ -28,16 +32,32 @@ export default function MultiSelectWidget({
   commandLabel = "Select options",
   disabled = false,
   className = "",
+  handleNewItem,
 }: MultiSelectWidgetProps) {
   const id = useId();
 
   return (
     <div className={`space-y-2 ${className}`}>
-      {label && (
-        <Label htmlFor={id} className="text-sm font-medium text-muted-foreground">
-          {label}
-        </Label>
-      )}
+      <div
+        className={cn(
+          "flex items-center",
+          label ? "justify-between" : "justify-end"
+        )}
+      >
+        {label && (
+          <Label
+            htmlFor={id}
+            className="text-sm font-medium text-muted-foreground mb-2"
+          >
+            {label}
+          </Label>
+        )}
+        {handleNewItem && (
+          <Button size={"sm"} className="rounded-full p-2" variant={"ghost"} type="button" onClick={handleNewItem}>
+            <PlusCircle size={10} />
+          </Button>
+        )}
+      </div>
       <MultipleSelector
         commandProps={{ label: commandLabel }}
         value={value}
@@ -48,8 +68,13 @@ export default function MultiSelectWidget({
         hidePlaceholderWhenSelected={hidePlaceholderWhenSelected}
         disabled={disabled}
         emptyIndicator={<p className="text-center text-sm">{emptyMessage}</p>}
-      />
-      <p className="text-muted-foreground mt-2 text-xs" role="region" aria-live="polite">
+        className="h-full"
+      />{" "}
+      {/* <p
+        className="text-muted-foreground mt-2 text-xs"
+        role="region"
+        aria-live="polite"
+      >
         Inspired by{" "}
         <a
           className="hover:text-foreground underline"
@@ -59,7 +84,7 @@ export default function MultiSelectWidget({
         >
           shadcn/ui expansions
         </a>
-      </p>
+      </p> */}
     </div>
   );
 }

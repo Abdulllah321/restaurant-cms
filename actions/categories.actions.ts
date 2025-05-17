@@ -4,7 +4,6 @@ import { categorySchema } from "@/schemas/menu.schemas";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-
 // Create Category
 export async function createCategory(_: unknown, formData: FormData) {
   try {
@@ -26,10 +25,13 @@ export async function createCategory(_: unknown, formData: FormData) {
       data: {
         name: data.name,
         branchId: data.branchId,
-      }
+      },
+      include: {
+        items: true,
+      },
     });
 
-    revalidatePath('/menus/create');
+    revalidatePath("/menus/create");
 
     return { success: true, category };
   } catch (error) {
@@ -45,68 +47,24 @@ export async function createCategory(_: unknown, formData: FormData) {
 export async function getCategories(branchId?: string) {
   try {
     const categories = await prisma.category.findMany({
-      where: branchId ? { branchId } : undefined,
+      where: { branchId },
       include: {
-        branch: true,
+        items: true,
         _count: {
           select: {
-            menuCategories: true,
             items: true,
           },
         },
       },
       orderBy: {
-        createdAt: "desc",
+        name: "asc",
       },
     });
+
     return { success: true, categories };
   } catch (error) {
     console.error("Error fetching categories:", error);
     return { success: false, error: "Failed to fetch categories" };
-  }
-}
-
-// Fetch Categories for Select Dropdown
-export async function getCategoriesForSelect(branchId: string) {
-  try {
-    const categories = await prisma.category.findMany({
-      where: { branchId },
-      select: {
-        id: true,
-        name: true,
-      },
-      orderBy: {
-        name: "asc",
-      },
-    });
-    return { success: true, categories };
-  } catch (error) {
-    console.error("Error fetching categories for select:", error);
-    return { success: false, error: "Failed to fetch categories" };
-  }
-}
-
-// Fetch Single Category with Details
-export async function getCategoryById(id: string) {
-  try {
-    const category = await prisma.category.findUnique({
-      where: { id },
-      include: {
-        branch: true,
-        menuCategories: {
-          include: {
-            menu: true,
-          },
-        },
-        items: true,
-      },
-    });
-
-    if (!category) throw new Error("Category not found");
-    return { success: true, category };
-  } catch (error) {
-    console.error("Error fetching category:", error);
-    return { success: false, error: "Category not found" };
   }
 }
 
@@ -165,7 +123,6 @@ export async function deleteCategory(id: string) {
       include: {
         _count: {
           select: {
-            menuCategories: true,
             items: true,
           },
         },
@@ -176,7 +133,7 @@ export async function deleteCategory(id: string) {
       return { success: false, error: "Category not found" };
     }
 
-    if (category._count.menuCategories > 0 || category._count.items > 0) {
+    if (category._count.items > 0) {
       return {
         success: false,
         error:
@@ -192,28 +149,5 @@ export async function deleteCategory(id: string) {
   } catch (error) {
     console.error("Error deleting category:", error);
     return { success: false, error: "Failed to delete category" };
-  }
-}
-
-// Fetch Categories by Branch
-export async function getCategoriesByBranch(branchId: string) {
-  try {
-    const categories = await prisma.category.findMany({
-      where: { branchId },
-      include: {
-        _count: {
-          select: {
-            items: true,
-          },
-        },
-      },
-      orderBy: {
-        name: "asc",
-      },
-    });
-    return categories;
-  } catch (error) {
-    console.error("Error fetching categories by branch:", error);
-    return { success: false, error: "Failed to fetch categories" };
   }
 }

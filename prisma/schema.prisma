@@ -5,6 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -56,39 +57,26 @@ enum SocialProvider {
 }
 
 model Menu {
-  id             String         @id @default(cuid())
-  name           String
-  description    String?
-  branchId       String
-  branch         Branch         @relation(fields: [branchId], references: [id])
-  menuCategories MenuCategory[]
-  items          MenuItem[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  branchId    String
+  branch      Branch     @relation(fields: [branchId], references: [id])
+  categories  Category[]
+  items       MenuItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Category {
-  id             String         @id @default(cuid())
-  name           String
-  branchId       String
-  branch         Branch         @relation(fields: [branchId], references: [id])
-  menuCategories MenuCategory[]
-  items          MenuItem[]
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-}
-
-model MenuCategory {
-  id         String   @id @default(cuid())
-  menuId     String
-  categoryId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  menu     Menu     @relation(fields: [menuId], references: [id])
-  category Category @relation(fields: [categoryId], references: [id])
-
-  @@unique([menuId, categoryId])
+  id        String     @id @default(cuid())
+  name      String
+  branchId  String
+  branch    Branch     @relation(fields: [branchId], references: [id])
+  menus     Menu[]
+  items     MenuItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model MenuItem {
@@ -98,8 +86,7 @@ model MenuItem {
   price       Float
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
-  menuId      String
-  menu        Menu     @relation(fields: [menuId], references: [id])
+  menus       Menu[]
   branchId    String
   branch      Branch   @relation(fields: [branchId], references: [id]) // Add Branch relationship
   imageUrl    String?
