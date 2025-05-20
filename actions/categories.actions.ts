@@ -1,15 +1,17 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { categorySchema } from "@/schemas/menu.schemas";
-import { revalidatePath } from "next/cache";
+import {  revalidateTag } from "next/cache";
 import { z } from "zod";
+import { uploadImage } from "./upload.image";
 
 // Create Category
 export async function createCategory(_: unknown, formData: FormData) {
   try {
-    const formValues = {
-      name: formData.get("name"),
-      branchId: formData.get("branchId"),
+      const formValues = {
+      name: (formData.get("name") as string)?.trim(),
+      branchId: (formData.get("branchId") as string)?.trim(),
+      image: (formData.get("image") as File) || undefined,
     };
 
     const { success, error, data } = categorySchema.safeParse(formValues);
@@ -20,18 +22,30 @@ export async function createCategory(_: unknown, formData: FormData) {
         values: formValues,
       };
     }
-
+    let imageUrl = undefined;
+    try {
+      if (data.image) {
+        imageUrl = (await uploadImage(data.image)).publicUrl;
+      }
+    } catch (uploadError) {
+      console.error("[IMAGE_UPLOAD_ERROR]", uploadError);
+      return {
+        error: "Failed to upload image. Please try again later.",
+        values: formValues,
+      };
+    }
     const category = await prisma.category.create({
       data: {
         name: data.name,
         branchId: data.branchId,
+        imageUrl,
       },
       include: {
         items: true,
       },
     });
 
-    revalidatePath("/menus/create");
+    revalidateTag(`branch-${data.branchId}-categories`);
 
     return { success: true, category };
   } catch (error) {
@@ -44,12 +58,26 @@ export async function createCategory(_: unknown, formData: FormData) {
 }
 
 // Fetch All Categories (with branch info)
-export async function getCategories(branchId?: string) {
+export async function getCategories(branchId?: string, query?: string) {
   try {
     const categories = await prisma.category.findMany({
-      where: { branchId },
+      where: {
+        branchId,
+        name: query
+          ? {
+              contains: query,
+              mode: "insensitive",
+            }
+          : undefined,
+      },
       include: {
         items: true,
+        menus: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         _count: {
           select: {
             items: true,
@@ -77,8 +105,9 @@ export async function updateCategory(_: unknown, formData: FormData) {
     }
 
     const formValues = {
-      name: formData.get("name"),
-      branchId: formData.get("branchId"),
+      name: (formData.get("name") as string)?.trim(),
+      branchId: (formData.get("branchId") as string)?.trim(),
+      image: (formData.get("image") as File) || undefined,
     };
 
     const { success, error, data } = categorySchema.safeParse(formValues);
@@ -90,16 +119,31 @@ export async function updateCategory(_: unknown, formData: FormData) {
       };
     }
 
+       let imageUrl = undefined;
+    try {
+      if (data.image) {
+        imageUrl = (await uploadImage(data.image)).publicUrl;
+      }
+    } catch (uploadError) {
+      console.error("[IMAGE_UPLOAD_ERROR]", uploadError);
+      return {
+        error: "Failed to upload image. Please try again later.",
+        values: formValues,
+      };
+    }
+
     const category = await prisma.category.update({
       where: { id },
       data: {
         name: data.name,
         branchId: data.branchId,
+        imageUrl
       },
       include: {
         branch: true,
       },
     });
+    revalidateTag(`branch-${data.branchId}-categories`);
 
     return { success: true, category };
   } catch (error) {
@@ -144,6 +188,8 @@ export async function deleteCategory(id: string) {
     await prisma.category.delete({
       where: { id },
     });
+        revalidateTag(`branch-${category.branchId}-categories`);
+
 
     return { success: true };
   } catch (error) {

@@ -3,12 +3,11 @@ interface Menu {
   id: string;
   name: string;
   description?: string | null;
-  branchId: string;
   createdAt: Date;
   updatedAt: Date;
   categories: Category[];
   items: MenuItem[];
-  MenuCategory: MenuCategory[];
+  branch: Branch[];
 }
 
 // interface
@@ -19,38 +18,25 @@ interface Category {
   createdAt: Date;
   updatedAt: Date;
   menus: Menu[];
+  imageUrl: string?;
   items: MenuItem[];
-  MenuCategory: MenuCategory[];
   _count?: {
-    items: number
-  }
-}
-
-interface MenuCategory {
-  id: string;
-  menuId: string;
-  categoryId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  menu: Menu;
-  category: Category;
+    items: number;
+  };
 }
 
 // interface
 interface MenuItem {
-  id: string;
+  id?: string;
   name: string;
-  description?: string | null;
+  description: string | null;
   price: number;
   categoryId: string;
-  menuId: string;
-  branchId: string;
   imageUrl?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  blurDataUrl?: string | null;
+  createdAt?: Date;
+  updatedAt?: Date;
   category: Category;
-  menu: Menu;
-  OrderItem: OrderItem[];
 }
 
 interface Branch {

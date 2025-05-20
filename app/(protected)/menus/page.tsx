@@ -1,20 +1,10 @@
-import Header from '@/components/common/Header'
-import { Button } from '@/components/ui/button'
-import { RiAddCircleFill, RiPulseFill } from '@remixicon/react'
-import Link from 'next/link'
-import React from 'react'
+import MenusPage from "./MenusPage"; // The component above
+import { getMenus } from "@/actions/menu.actions";
 
-const page = () => {
-    return (
-        <>
-            <Link href={'/menus/create'}>
-                <Button>
-                    <RiAddCircleFill  />
-                    Add New Menu
-                </Button>
-            </Link>
-        </>
-    )
-}
+const Page = async () => {
+  const menus = await getMenus() as unknown as Menu[];
 
-export default page
+  return <MenusPage menus={menus} />;
+};
+
+export default Page;

@@ -5,7 +5,6 @@ import React, { useState, useActionState } from "react";
 import { Input } from "../ui/input";
 import { createMenuItem, updateMenuItem } from "@/actions/menu.actions";
 import { Button } from "../ui/button";
-import { fetchSelectedBranch } from "@/data/constants";
 import UploadImage from "../common/UploadImage";
 import { toast } from "sonner";
 
@@ -21,11 +20,10 @@ const MenuItemForm = ({
   onAdd,
   categoryId,
 }: {
-  selectedMenuItem?: MenuItemInput;
+  selectedMenuItem?: MenuItem;
   onAdd?: (menuItem: MenuItem) => void;
   categoryId?: string;
 }) => {
-  const branchId = fetchSelectedBranch()?.id;
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const action = async function (_: unknown, formData: FormData) {
@@ -81,7 +79,7 @@ const MenuItemForm = ({
         onFileSelect={(file) => {
           setImageFile(file);
         }}
-        // defaultPreview={imageFile}
+        defaultPreview={selectedMenuItem?.imageUrl ?? undefined}
       />
 
       {/* Name */}
@@ -123,9 +121,6 @@ const MenuItemForm = ({
           <p className="text-destructive">{getErrorMessage("price")}</p>
         )}
       </div>
-
-      {/* Branch ID */}
-      <Input type="hidden" value={branchId} name="branchId" />
 
       {/* Category ID */}
       <Input type="hidden" value={categoryId} name="categoryId" />

@@ -6,12 +6,13 @@ export const menuItemSchema = z.object({
   price: z.number().positive(),
   image: z.instanceof(File).optional(),
   categoryId: z.string(),
-  branchId: z.string(),
 });
 
 export const categorySchema = z.object({
   name: z.string().min(1, "Name is required"),
   branchId: z.string().min(1, "Branch is required"),
+    image: z.instanceof(File).optional(),
+
 });
 
 export const menuSchema = z.object({

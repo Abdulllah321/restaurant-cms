@@ -73,6 +73,7 @@ model Category {
   name      String
   branchId  String
   branch    Branch     @relation(fields: [branchId], references: [id])
+  imageUrl  String?
   menus     Menu[]
   items     MenuItem[]
   createdAt DateTime   @default(now())
@@ -87,9 +88,8 @@ model MenuItem {
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
   menus       Menu[]
-  branchId    String
-  branch      Branch   @relation(fields: [branchId], references: [id]) // Add Branch relationship
   imageUrl    String?
+  blurDataUrl String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -288,8 +288,6 @@ model Branch {
   updatedAt    DateTime      @updatedAt
 
   Category Category[]
-
-  MenuItem MenuItem[]
 }
 
 model Feedback {

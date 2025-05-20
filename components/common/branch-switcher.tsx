@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Cookies from "js-cookie";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,7 +32,11 @@ import {
 } from "../ui/context-menu";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 import { deleteBranch } from "@/actions/branch.actions";
-import { BRANCH_LOCAL_STORAGE_KEY } from "@/data/constants";
+import {
+  BRANCH_COOKIE_KEY,
+  getSelectedBranchFromCookies,
+} from "@/data/constants";
+import { useRouter } from "next/navigation";
 
 // Branch Type Definition
 export interface BranchSwitcher {
@@ -47,39 +52,27 @@ interface BranchSwitcherProps {
   getBranches: () => void;
 }
 
-// Local Storage Key
-
 export function BranchSwitcher({ branches, getBranches }: BranchSwitcherProps) {
   const [activeBranch, setActiveBranch] = React.useState<BranchSwitcher | null>(
-    null
+    getSelectedBranchFromCookies()
   );
   const [isBranchDialogOpen, setIsBranchDialogOpen] = React.useState(false);
   const [selectedBranch, setSelectedBranch] = React.useState<
     BranchSwitcher | BranchFields | null
   >(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const router = useRouter();
 
-  // Load selected branch from local storage on mount
-  React.useEffect(() => {
-    const savedBranch = localStorage.getItem(BRANCH_LOCAL_STORAGE_KEY);
-    if (savedBranch) {
-      try {
-        const parsedBranch = JSON.parse(savedBranch) as BranchSwitcher;
-        const existingBranch = branches.find((b) => b.id === parsedBranch.id);
-        if (existingBranch) setActiveBranch(existingBranch);
-      } catch (error) {
-        console.error(
-          "Failed to parse saved branch from local storage:",
-          error
-        );
-      }
-    }
-  }, [branches]);
-
-  // Save selected branch to local storage
+  // Save selected branch to cookies
   const handleBranchSelect = (branch: BranchSwitcher) => {
     setActiveBranch(branch);
-    localStorage.setItem(BRANCH_LOCAL_STORAGE_KEY, JSON.stringify(branch));
+    Cookies.set(BRANCH_COOKIE_KEY, JSON.stringify(branch), {
+      path: "/",
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      expires: 30, // 30 days
+    });
+    router.refresh();
   };
 
   // Handle branch form success
@@ -103,6 +96,8 @@ export function BranchSwitcher({ branches, getBranches }: BranchSwitcherProps) {
 
   const handleDeleteConfirmationBranch = async (branchId: string) => {
     await deleteBranch(branchId);
+    setIsDeleteDialogOpen(false);
+    getBranches();
   };
 
   return (

@@ -1,9 +1,11 @@
+"use client";
 import { Label } from "@radix-ui/react-label";
-import React, { useActionState} from "react";
+import React, { useActionState,  useState } from "react";
 import { Input } from "../ui/input";
 import { createCategory, updateCategory } from "@/actions/categories.actions";
 import { Button } from "../ui/button";
-import { fetchSelectedBranch } from "@/data/constants";
+import { getSelectedBranchFromCookies } from "@/data/constants";
+import UploadImage from "../common/UploadImage";
 
 export type CategoryInput = {
   name: string;
@@ -13,13 +15,17 @@ export type CategoryInput = {
 
 const CategoryForm = ({
   selectedCategory,
-  onAdd
+  onAdd,
 }: {
   selectedCategory?: Category;
-  onAdd?: (category: Category
-  ) => void
+  onAdd?: (category: Category) => void;
 }) => {
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
   const action = async function (_: unknown, formData: FormData) {
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
     const response = selectedCategory
       ? await updateCategory(_, formData)
       : await createCategory(_, formData);
@@ -28,10 +34,9 @@ const CategoryForm = ({
     }
 
     return response;
-  }
+  };
 
-  const branchId = fetchSelectedBranch()?.id;
-
+  const branchId = getSelectedBranchFromCookies()?.id;
 
   const [state, formAction, pending] = useActionState(
     async (_: unknown, formData: FormData) => await action(_, formData),
@@ -45,13 +50,24 @@ const CategoryForm = ({
   const getErrorMessage = (field: keyof CategoryInput) => {
     return state && "errors" in state
       ? (state.errors as Record<keyof CategoryInput, string | undefined>)?.[
-      field
-      ]
+          field
+        ]
       : "";
   };
 
   return (
     <form action={formAction} className="space-y-6">
+      {selectedCategory && <input name="id" value={selectedCategory.id} />}
+      <UploadImage
+        onFileSelect={(file) => {
+          setImageFile(file);
+        }}
+        defaultPreview={
+          selectedCategory && selectedCategory.imageUrl
+            ? selectedCategory.imageUrl
+            : undefined
+        }
+      />
       <div>
         <Label>Name</Label>
         <Input
@@ -70,8 +86,8 @@ const CategoryForm = ({
             ? "Updating..."
             : "Creating..."
           : selectedCategory
-            ? "Update Menu"
-            : "Create Menu"}
+          ? "Update Menu"
+          : "Create Menu"}
       </Button>
     </form>
   );

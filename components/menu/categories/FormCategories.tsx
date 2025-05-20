@@ -2,10 +2,10 @@
 
 import { getCategories } from "@/actions/categories.actions";
 import ToggleSelector from "@/components/common/ToggleSelector";
-import { fetchSelectedBranch } from "@/data/constants";
+import { getSelectedBranchFromCookies } from "@/data/constants";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const Categories = ({
+const FormCategories = ({
   selectedCategories = [], // Default empty array
   handleToggleCategory,
   handleAddCategory,
@@ -29,7 +29,7 @@ const Categories = ({
   }, [selectedCategories]);
 
   useEffect(() => {
-    const branch = fetchSelectedBranch();
+    const branch = getSelectedBranchFromCookies();
     if (branch) {
       setBranchId(branch.id);
     } else {
@@ -83,4 +83,4 @@ const Categories = ({
   );
 };
 
-export default Categories;
+export default FormCategories;

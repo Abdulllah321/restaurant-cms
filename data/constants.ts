@@ -1,28 +1,22 @@
-import { toast } from "sonner";
+import { BranchSwitcher } from "@/components/common/branch-switcher";
+import Cookies from "js-cookie";
 
-export const BRANCH_LOCAL_STORAGE_KEY = "selectedBranch";
+export const BRANCH_COOKIE_KEY = "selectedBranch";
 
-export const fetchSelectedBranch = () => {
+export const getSelectedBranchFromCookies = (): BranchSwitcher | null => {
   try {
-    // Proper window check for Next.js SSR
-    if (typeof window === "undefined") return null;
-    
-    const branchData = localStorage.getItem(BRANCH_LOCAL_STORAGE_KEY);
-
-    if (!branchData) {
-      toast.warning("No branch selected", {
-        description: "Please select a branch to continue",
-      });
-      return null;
-    }
-
-    const branch = JSON.parse(branchData) as Branch;
-    return branch;
+    const branchData = Cookies.get(BRANCH_COOKIE_KEY);
+    return branchData ? JSON.parse(branchData) : null;
   } catch (error) {
-    console.error("Error parsing branch data:", error);
-    toast.error("Invalid branch data", {
-      description: "Please select a branch again",
-    });
+    console.error("Failed to parse selected branch from cookies:", error);
     return null;
   }
+};
+
+export const debounce = (func: (...args: unknown[]) => void, delay: number) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return (...args: unknown[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
 };

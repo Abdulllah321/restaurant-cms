@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { createMenu } from "@/actions/menu.actions";
-import Categories from "./components/Categories";
+import { createMenu, updateMenu } from "@/actions/menu.actions";
+import Categories from "../menu/categories/FormCategories";
 import { ReusableDialog } from "../common/reuseable-dialog";
 import CategoryForm from "./CategoryForm";
-import { fetchSelectedBranch } from "@/data/constants";
+import { getSelectedBranchFromCookies } from "@/data/constants";
 import MultiSelectWidget from "../common/CustomMultiSelect";
 import MenuItemForm from "./MenuItemForm";
 import { useForm } from "react-hook-form";
@@ -33,15 +33,13 @@ const menuSchema = z.object({
 });
 
 interface MenuFormProps {
-  selectedMenu?: MenuInput | null;
+  selectedMenu?: Menu | null;
 }
 
 const MenuForm: React.FC<MenuFormProps> = ({ selectedMenu }) => {
   const [branchId, setBranchId] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    selectedMenu?.categories || []
-  );
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedItemsByCategory, setSelectedItemsByCategory] = useState<
     Record<string, Option[]>
   >({});
@@ -52,7 +50,30 @@ const MenuForm: React.FC<MenuFormProps> = ({ selectedMenu }) => {
   );
 
   useEffect(() => {
-    const selectedBranch = fetchSelectedBranch();
+    if (selectedMenu?.categories && selectedMenu?.items) {
+      // 1. Set selected category IDs
+      setSelectedCategories(selectedMenu.categories.map((cat) => cat.id));
+
+      // 2. Group items by categoryId
+      const grouped: Record<string, { label: string; value: string }[]> = {};
+
+      selectedMenu.items.forEach((item) => {
+        if (!grouped[item.categoryId]) {
+          grouped[item.categoryId] = [];
+        }
+        grouped[item.categoryId].push({
+          label: item.name,
+          value: item.id!,
+        });
+      });
+
+      // 3. Set grouped items
+      setSelectedItemsByCategory(grouped);
+    }
+  }, [selectedMenu]);
+
+  useEffect(() => {
+    const selectedBranch = getSelectedBranchFromCookies();
     if (!selectedBranch) {
       toast.error("Invalid branch data", {
         description: "Please select a branch again",
@@ -75,9 +96,10 @@ const MenuForm: React.FC<MenuFormProps> = ({ selectedMenu }) => {
       name: selectedMenu?.name || "",
       description: selectedMenu?.description || "",
       branchId: branchId ?? undefined,
-      categories: selectedMenu?.categories || [],
+      categories: [],
     },
   });
+
   useEffect(() => {
     if (branchId) {
       setValue("branchId", branchId); // Set the branchId in the form when available
@@ -91,7 +113,11 @@ const MenuForm: React.FC<MenuFormProps> = ({ selectedMenu }) => {
       data.items = Object.values(selectedItemsByCategory).flatMap((items) =>
         items.map((item) => item.value)
       );
-      await createMenu(data);
+      if (selectedMenu) {
+        await updateMenu(selectedMenu.id, data);
+      } else {
+        await createMenu(data);
+      }
       console.log("Successfully submitted:", data);
     } catch (err) {
       console.log("Error during form submission:", err);
@@ -141,7 +167,7 @@ const MenuForm: React.FC<MenuFormProps> = ({ selectedMenu }) => {
           )}
         </div>
 
-        <Input type="hidden" value={branchId!} {...register("branchId")} />
+        <Input type="hidden" value={branchId || ""} {...register("branchId")} />
 
         <div>
           <Label>Description</Label>
@@ -172,10 +198,12 @@ const MenuForm: React.FC<MenuFormProps> = ({ selectedMenu }) => {
             <div key={categoryId} className="border-t first:border-t-0 pt-4">
               <MultiSelectWidget
                 key={category.items.length}
-                options={category.items.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                }))}
+                options={
+                  category.items.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  })) as Option[]
+                }
                 placeholder="Select Menu Item"
                 handleNewItem={() => handleNewItem(category.id)}
                 label={category.name}
