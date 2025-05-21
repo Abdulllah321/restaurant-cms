@@ -1,6 +1,6 @@
+"use client";
 import * as React from "react";
 
-// import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,

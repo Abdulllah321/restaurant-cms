@@ -12,12 +12,14 @@ interface ActionPageProps {
 const ActionPage = async ({ params, searchParams }: ActionPageProps) => {
   const { action } = await params;
   const { query } = await searchParams;
+  
 
   let selectedMenu: Menu | null = null;
   if (action !== "create" && action !== "categories" && action !== "items") {
     const res = await getMenuById(action);
     selectedMenu = res.menu as unknown as Menu;
   }
+
   {
     switch (action) {
       case "categories":

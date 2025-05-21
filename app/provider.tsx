@@ -1,3 +1,5 @@
+"use client";
+import { BreadcrumbProvider } from '@/context/BreadcrumbContext'
 import { UserProvider } from '@/hooks/useUser'
 import React, { ReactNode } from 'react'
 
@@ -6,7 +8,9 @@ const Providers = ({ children }: {
 }) => {
     return (
         <UserProvider>
-            {children}
+            <BreadcrumbProvider>
+                {children}
+            </BreadcrumbProvider>
         </UserProvider>
     )
 }

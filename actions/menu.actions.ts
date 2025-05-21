@@ -11,7 +11,11 @@ export async function getMenus() {
     const menus = await prisma.menu.findMany({
       include: {
         branch: true,
-        categories: true,
+        categories: {
+          include: {
+            items: true,
+          }
+        },
         items: true,
       },
       orderBy: {
@@ -23,7 +27,7 @@ export async function getMenus() {
   } catch (error) {
     throw new Error(
       "Error fetching menus: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 }
@@ -48,7 +52,7 @@ export async function getMenuById(menuId: string) {
   } catch (error) {
     throw new Error(
       "Error fetching menu: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 }
@@ -82,7 +86,7 @@ export async function createMenu(data: MenuInput) {
   } catch (error) {
     throw new Error(
       "Error creating menu: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 }
@@ -99,7 +103,7 @@ export async function deleteMenu(menuId: string) {
   } catch (error) {
     throw new Error(
       "Error deleting menu: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 }
@@ -135,7 +139,7 @@ export async function updateMenu(menuId: string, data: MenuInput) {
   } catch (error) {
     throw new Error(
       "Error updating menu: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 }
@@ -183,7 +187,7 @@ export async function createMenuItem(_: unknown, formData: FormData) {
       },
     });
 
-    
+
     return {
       message: "Menu item created successfully",
       menuItem: newMenuItem,
@@ -245,7 +249,7 @@ export async function updateMenuItem(_: unknown, formData: FormData) {
   } catch (error) {
     throw new Error(
       "Error updating menu item: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 }
@@ -261,7 +265,7 @@ export async function deleteMenuItem(itemId: string) {
   } catch (error) {
     throw new Error(
       "Error deleting menu item: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 }
@@ -272,11 +276,11 @@ export const getMenuItems = async (query?: string) => {
     const menuItems = await prisma.menuItem.findMany({
       where: query
         ? {
-            name: {
-              contains: query,
-              mode: "insensitive", // case-insensitive search
-            },
-          }
+          name: {
+            contains: query,
+            mode: "insensitive", // case-insensitive search
+          },
+        }
         : undefined,
       include: {
         category: true,

@@ -63,6 +63,19 @@ export function BranchSwitcher({ branches, getBranches }: BranchSwitcherProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const router = useRouter();
 
+  React.useEffect(() => {
+    if (branches && branches.length && !activeBranch) {
+      const branch = branches[0]
+      setActiveBranch(branch);
+      Cookies.set(BRANCH_COOKIE_KEY, JSON.stringify(branch), {
+        path: "/",
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        expires: 30, // 30 days
+      });
+    }
+  }, [branches])
+
   // Save selected branch to cookies
   const handleBranchSelect = (branch: BranchSwitcher) => {
     setActiveBranch(branch);
@@ -172,7 +185,7 @@ export function BranchSwitcher({ branches, getBranches }: BranchSwitcherProps) {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
-              onClick={() => setIsBranchDialogOpen(true)}
+              onClick={() => { setSelectedBranch(null);setIsBranchDialogOpen(true) }}
               className="gap-2 p-2 cursor-pointer"
             >
               <RiAddLine size={16} aria-hidden="true" />

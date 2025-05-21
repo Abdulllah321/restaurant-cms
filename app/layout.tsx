@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fira_Code, Merriweather, Oxanium } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import Providers from "./provider";
 
 
 // Load the fonts with proper variable names
@@ -24,13 +25,16 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${sans.variable} ${serif.variable} ${mono.variable} antialiased`}
-      >
-        <Toaster />
-     {children}
-      </body>
-    </html>
+    <Providers>
+
+      <html lang="en">
+        <body
+          className={`${sans.variable} ${serif.variable} ${mono.variable} antialiased`}
+        >
+          <Toaster />
+          {children}
+        </body>
+      </html>
+    </Providers>
   );
 }

@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRightIcon, SearchIcon } from "lucide-react";
+import { ArrowRightIcon, PlusCircle, SearchIcon } from "lucide-react";
 import Form from "next/form";
 import { useSearchParams } from "next/navigation";
 
@@ -23,7 +23,7 @@ export default function PageHeader({
   title,
   searchPlaceholder = "Search...",
   actionButtonLabel = "Add",
-  actionButtonIcon,
+  actionButtonIcon = <PlusCircle />,
   actionTrigger,
   formAction,
   isCard = true,
